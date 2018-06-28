@@ -8,9 +8,9 @@ import android.arch.persistence.room.PrimaryKey;
 @Entity(tableName = "configuration")
 public class Configuration {
     @PrimaryKey(autoGenerate = true)
-    private int id;
-    private int position;
-    private String name;
+    public int id;
+    public int position;
+    public String name;
 
     @Ignore
     public Configuration(int position, String name){
