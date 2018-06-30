@@ -56,4 +56,9 @@ dependencies {
     //google play services Fitness and sign-in
     implementation "com.google.android.gms:play-services-fitness:$google_play_services_version"
     implementation "com.google.android.gms:play-services-auth:$google_play_services_version"
+
+    //Butterknife
+    implementation 'com.jakewharton:butterknife:8.8.1'
+    annotationProcessor 'com.jakewharton:butterknife-compiler:8.8.1'
+
 }
