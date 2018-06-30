@@ -26,17 +26,27 @@ import com.udacity.xaenimax.runmyway.R;
 
 import java.util.Calendar;
 import java.util.Date;
+import java.util.Scanner;
 import java.util.concurrent.TimeUnit;
+
+import butterknife.BindView;
+import butterknife.ButterKnife;
 
 public class MainActivity extends AppCompatActivity {
     private static final String LOG_TAG = AppCompatActivity.class.getSimpleName();
     private static final int GOOGLE_FIT_PERMISSIONS_REQUEST_CODE = 3457;
 
+    @BindView(R.id.toolbar)
+    public Toolbar toolbar;
+    @BindView(R.id.fab)
+    public FloatingActionButton mFloatingActionButton;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        ButterKnife.bind(this);
+
         setSupportActionBar(toolbar);
 
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
@@ -75,6 +85,7 @@ public class MainActivity extends AppCompatActivity {
             }
         }else {
             //TODO SnackBAr che dice che occorre accettare
+            Snackbar.make(mFloatingActionButton, getString(R.string.google_account_alert), Snackbar.LENGTH_LONG).show();
         }
     }
 
