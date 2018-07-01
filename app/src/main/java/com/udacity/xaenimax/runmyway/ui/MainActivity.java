@@ -64,7 +64,7 @@ public class MainActivity extends AppCompatActivity {
 
         if (!GoogleSignIn.hasPermissions(GoogleSignIn.getLastSignedInAccount(this), fitnessOptions)) {
             GoogleSignIn.requestPermissions(
-                    this, // your activity
+                    this,
                     GOOGLE_FIT_PERMISSIONS_REQUEST_CODE,
                     GoogleSignIn.getLastSignedInAccount(this),
                     fitnessOptions);
@@ -83,7 +83,6 @@ public class MainActivity extends AppCompatActivity {
 
             }
         }else {
-            //TODO SnackBAr che dice che occorre accettare
             Snackbar.make(mFloatingActionButton, getString(R.string.google_account_alert), Snackbar.LENGTH_LONG).show();
         }
     }
@@ -96,7 +95,8 @@ public class MainActivity extends AppCompatActivity {
         long startTime = cal.getTimeInMillis();
 
         DataReadRequest readRequest = new DataReadRequest.Builder()
-                .aggregate(DataType.TYPE_STEP_COUNT_DELTA, DataType.AGGREGATE_STEP_COUNT_DELTA)
+                .aggregate(DataType.TYPE_STEP_COUNT_DELTA,
+                        DataType.AGGREGATE_STEP_COUNT_DELTA)
                 .setTimeRange(startTime, endTime, TimeUnit.MILLISECONDS)
                 .build();
 

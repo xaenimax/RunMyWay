@@ -1,5 +1,6 @@
 package com.udacity.xaenimax.runmyway.model.dao;
 
+import android.arch.lifecycle.LiveData;
 import android.arch.persistence.room.Dao;
 import android.arch.persistence.room.Delete;
 import android.arch.persistence.room.Insert;
@@ -14,7 +15,7 @@ import java.util.List;
 @Dao
 public interface ConfigurationStepDao {
     @Query("SELECT * FROM configuration_step where id_configuration = :configurationId ORDER BY position")
-    List<ConfigurationStep> listAllConfigurationSteps(int configurationId);
+    LiveData<List<ConfigurationStep>> listAllConfigurationSteps(int configurationId);
 
     @Insert
     void insertConfiguration(ConfigurationStep configuration);
