@@ -2,6 +2,8 @@ package com.udacity.xaenimax.runmyway.ui;
 
 import android.arch.lifecycle.LiveData;
 import android.arch.lifecycle.Observer;
+import android.arch.lifecycle.ViewModelProvider;
+import android.arch.lifecycle.ViewModelProviders;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
@@ -12,8 +14,10 @@ import android.view.ViewGroup;
 
 import com.udacity.xaenimax.runmyway.R;
 import com.udacity.xaenimax.runmyway.model.Configuration;
+import com.udacity.xaenimax.runmyway.model.RunSession;
 import com.udacity.xaenimax.runmyway.model.dao.AppDatabase;
 import com.udacity.xaenimax.runmyway.model.dao.AppExecutor;
+import com.udacity.xaenimax.runmyway.viewmodel.MainViewModel;
 
 import java.util.List;
 
@@ -37,6 +41,13 @@ public class MainActivityFragment extends Fragment {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
+        MainViewModel mainViewModel = ViewModelProviders.of(this).get(MainViewModel.class);
+        mainViewModel.getRunSession().observe(this, new Observer<RunSession>() {
+            @Override
+            public void onChanged(@Nullable RunSession runSession) {
+                //TODO setup UI
+            }
+        });
     }
 
     @Override
@@ -44,18 +55,5 @@ public class MainActivityFragment extends Fragment {
         super.onActivityCreated(savedInstanceState);
         mAppDatabase = AppDatabase.getInstance(getActivity());
 
-    }
-
-    @Override
-    public void onResume() {
-        super.onResume();
-
-        LiveData<List<Configuration>> configurations = mAppDatabase.configurationDao().listAllConfigurations();
-        configurations.observe(this, new Observer<List<Configuration>>() {
-            @Override
-            public void onChanged(@Nullable List<Configuration> configurations) {
-
-            }
-        });
     }
 }

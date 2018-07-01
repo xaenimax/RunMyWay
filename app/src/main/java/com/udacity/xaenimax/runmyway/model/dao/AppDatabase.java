@@ -30,4 +30,5 @@ public abstract class AppDatabase extends RoomDatabase {
 
     public abstract ConfigurationDao configurationDao();
     public abstract ConfigurationStepDao configurationStepDao();
+    public abstract RunSessionDao runSessionDao();
 }
