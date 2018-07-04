@@ -8,14 +8,19 @@
     tools:showIn="@layout/activity_main">
 
     <TextView
+        android:id="@+id/welcome_tv"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="16dp"
-        android:layout_marginTop="16dp"
+        android:layout_marginStart="@dimen/sixteen_dp"
+        android:layout_marginTop="@dimen/sixteen_dp"
         android:text="@string/welcome_string"
-        android:contentDescription="@string/welcome_content_description"
         android:textSize="@dimen/main_title_text_size"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintStart_toStartOf="@id/"
+        />
 
 </android.support.constraint.ConstraintLayout>
