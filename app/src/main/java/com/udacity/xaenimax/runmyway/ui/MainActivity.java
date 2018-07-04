@@ -23,6 +23,7 @@ import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.udacity.xaenimax.runmyway.R;
+import com.udacity.xaenimax.runmyway.network.GoogleFitManager;
 
 import java.util.Calendar;
 import java.util.Date;
@@ -32,9 +33,11 @@ import java.util.concurrent.TimeUnit;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
+import static com.udacity.xaenimax.runmyway.network.GoogleFitManager.GOOGLE_FIT_PERMISSIONS_REQUEST_CODE;
+import static com.udacity.xaenimax.runmyway.network.GoogleFitManager.accessGoogleFit;
+
 public class MainActivity extends AppCompatActivity {
     private static final String LOG_TAG = AppCompatActivity.class.getSimpleName();
-    private static final int GOOGLE_FIT_PERMISSIONS_REQUEST_CODE = 3457;
 
     @BindView(R.id.toolbar)
     public Toolbar toolbar;
@@ -49,7 +52,7 @@ public class MainActivity extends AppCompatActivity {
 
         setSupportActionBar(toolbar);
 
-        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
+        FloatingActionButton fab = findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -57,71 +60,16 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
-        FitnessOptions fitnessOptions = FitnessOptions.builder()
-                .addDataType(DataType.TYPE_STEP_COUNT_DELTA, FitnessOptions.ACCESS_READ)
-                .addDataType(DataType.AGGREGATE_STEP_COUNT_DELTA, FitnessOptions.ACCESS_READ)
-                .build();
-
-        if (!GoogleSignIn.hasPermissions(GoogleSignIn.getLastSignedInAccount(this), fitnessOptions)) {
-            GoogleSignIn.requestPermissions(
-                    this,
-                    GOOGLE_FIT_PERMISSIONS_REQUEST_CODE,
-                    GoogleSignIn.getLastSignedInAccount(this),
-                    fitnessOptions);
-        } else {
-            accessGoogleFit();
-        }
+        GoogleFitManager.checkPermission(this);
     }
-
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        if (resultCode == Activity.RESULT_OK) {
-            if (requestCode == GOOGLE_FIT_PERMISSIONS_REQUEST_CODE) {
-                accessGoogleFit();
-
-            }
+        if (resultCode == Activity.RESULT_OK && requestCode == GOOGLE_FIT_PERMISSIONS_REQUEST_CODE) {
+            accessGoogleFit(this);
         }else {
             Snackbar.make(mFloatingActionButton, getString(R.string.google_account_alert), Snackbar.LENGTH_LONG).show();
         }
     }
-
-    private void accessGoogleFit() {
-        Calendar cal = Calendar.getInstance();
-        cal.setTime(new Date());
-        long endTime = cal.getTimeInMillis();
-        cal.add(Calendar.YEAR, -1);
-        long startTime = cal.getTimeInMillis();
-
-        DataReadRequest readRequest = new DataReadRequest.Builder()
-                .aggregate(DataType.TYPE_STEP_COUNT_DELTA,
-                        DataType.AGGREGATE_STEP_COUNT_DELTA)
-                .setTimeRange(startTime, endTime, TimeUnit.MILLISECONDS)
-                .build();
-
-
-        Fitness.getHistoryClient(this, GoogleSignIn.getLastSignedInAccount(this))
-                .readData(readRequest)
-                .addOnSuccessListener(new OnSuccessListener<DataReadResponse>() {
-                    @Override
-                    public void onSuccess(DataReadResponse dataReadResponse) {
-                        Log.d(LOG_TAG, "onSuccess()");
-                    }
-                })
-                .addOnFailureListener(new OnFailureListener() {
-                    @Override
-                    public void onFailure(@NonNull Exception e) {
-                        Log.e(LOG_TAG, "onFailure()", e);
-                    }
-                })
-                .addOnCompleteListener(new OnCompleteListener<DataReadResponse>() {
-                    @Override
-                    public void onComplete(@NonNull Task<DataReadResponse> task) {
-                        Log.d(LOG_TAG, "onComplete()");
-                    }
-                });
-    }
-
-
 }
