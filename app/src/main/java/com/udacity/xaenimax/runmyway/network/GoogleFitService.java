@@ -31,6 +31,7 @@ import java.util.Date;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
 
+import static com.google.android.gms.fitness.data.Field.FIELD_CALORIES;
 import static com.google.android.gms.fitness.data.Field.FIELD_DISTANCE;
 import static com.google.android.gms.fitness.data.Field.FIELD_STEPS;
 
@@ -43,13 +44,17 @@ public class GoogleFitService{
             .addDataType(DataType.AGGREGATE_DISTANCE_DELTA, FitnessOptions.ACCESS_READ)
             .addDataType(DataType.TYPE_DISTANCE_DELTA, FitnessOptions.ACCESS_WRITE)
             .addDataType(DataType.AGGREGATE_DISTANCE_DELTA, FitnessOptions.ACCESS_WRITE)
+            .addDataType(DataType.TYPE_CALORIES_EXPENDED, FitnessOptions.ACCESS_READ)
+            .addDataType(DataType.AGGREGATE_CALORIES_EXPENDED, FitnessOptions.ACCESS_READ)
+            .addDataType(DataType.TYPE_CALORIES_EXPENDED, FitnessOptions.ACCESS_WRITE)
+            .addDataType(DataType.AGGREGATE_CALORIES_EXPENDED, FitnessOptions.ACCESS_WRITE)
             .build();
 
     public static FitnessOptions getFitnessOptions() {
         return fitnessOptions;
     }
 
-    public static void accessHistoryDistanceData(Context context) {
+    public static void accessHistoryDistanceData(Context context, final GoogleFitListener activitiesListener) {
         Calendar cal = Calendar.getInstance();
         cal.setTime(new Date());
         long endTime = cal.getTimeInMillis();
@@ -59,6 +64,8 @@ public class GoogleFitService{
         DataReadRequest readRequest = new DataReadRequest.Builder()
                 .aggregate(DataType.TYPE_DISTANCE_DELTA,
                         DataType.AGGREGATE_DISTANCE_DELTA)
+                .aggregate(DataType.TYPE_CALORIES_EXPENDED,
+                        DataType.AGGREGATE_CALORIES_EXPENDED)
                 .setTimeRange(startTime, endTime, TimeUnit.MILLISECONDS)
                 .bucketByTime(1, TimeUnit.DAYS)
                 .build();
@@ -70,14 +77,20 @@ public class GoogleFitService{
                     @Override
                     public void onSuccess(DataReadResponse dataReadResponse) {
                         Log.d(LOG_TAG, "onSuccess()");
-                        List<Bucket> buckets = dataReadResponse.getBuckets();
 
-                        DataSet dataSet =
+                        DataSet distanceDataSet =
                                 dataReadResponse.getDataSet(DataType.TYPE_DISTANCE_DELTA);
-
-                        float total = dataSet.isEmpty()
+                        float totalDistance = distanceDataSet.isEmpty()
                                 ? 0
-                                : dataSet.getDataPoints().get(0).getValue(FIELD_DISTANCE).asFloat();
+                                : distanceDataSet.getDataPoints().get(0).getValue(FIELD_DISTANCE).asFloat();
+
+                        DataSet caloriesDataSet =
+                                dataReadResponse.getDataSet(DataType.TYPE_CALORIES_EXPENDED);
+                        long totalkCal = caloriesDataSet.isEmpty()
+                                ? 0
+                                : caloriesDataSet.getDataPoints().get(0).getValue(FIELD_CALORIES).asInt();
+
+                        activitiesListener.onDailyActivitiesListener(totalDistance, totalkCal);
 
                     }
                 })
@@ -85,18 +98,14 @@ public class GoogleFitService{
                     @Override
                     public void onFailure(@NonNull Exception e) {
                         Log.e(LOG_TAG, "onFailure()", e);
-                    }
-                })
-                .addOnCompleteListener(new OnCompleteListener<DataReadResponse>() {
-                    @Override
-                    public void onComplete(@NonNull Task<DataReadResponse> task) {
-                        Log.d(LOG_TAG, "onComplete()");
+                        activitiesListener.onFailureListener(e.getMessage());
                     }
                 });
     }
 
     public interface GoogleFitListener{
-        void onDistanceDetected();
+        void onDailyActivitiesListener(float distance, long Kcal);
+        void onFailureListener(String errorMessage);
     }
 }
 

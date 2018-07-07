@@ -16,6 +16,7 @@ import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
 import com.google.android.gms.auth.api.signin.GoogleSignInClient;
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
 import com.udacity.xaenimax.runmyway.R;
+import com.udacity.xaenimax.runmyway.network.GoogleFitService;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -32,6 +33,8 @@ public class MainActivity extends AppCompatActivity {
     @BindView(R.id.fab)
     public FloatingActionButton mFloatingActionButton;
 
+    private GoogleFitService.GoogleFitListener mGoogleFitListener;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -47,13 +50,38 @@ public class MainActivity extends AppCompatActivity {
                 
             }
         });
+
+        setUpListeners();
+    }
+
+    private void setUpListeners() {
+        mGoogleFitListener = new GoogleFitService.GoogleFitListener() {
+            @Override
+            public void onDailyActivitiesListener(float distance, long Kcal) {
+                FragmentManager fragmentManager = getSupportFragmentManager();
+                MainActivityFragment fragment = (MainActivityFragment) fragmentManager.findFragmentById(R.id.main_fragment);
+                if(fragment != null){
+                    fragment.setUserInfo(distance, Kcal);
+                }
+            }
+
+            @Override
+            public void onFailureListener(String errorMessage) {
+                runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        Snackbar.make(mFloatingActionButton, getString(R.string.google_fit_failed), Snackbar.LENGTH_SHORT).show();
+                    }
+                });
+            }
+        };
     }
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         if (resultCode == Activity.RESULT_OK && requestCode == GOOGLE_FIT_PERMISSIONS_REQUEST_CODE) {
-            accessHistoryDistanceData(this);
+            accessHistoryDistanceData(this, mGoogleFitListener);
         } else {
             Snackbar.make(mFloatingActionButton, getString(R.string.google_account_alert), Snackbar.LENGTH_LONG).show();
         }
@@ -73,16 +101,8 @@ public class MainActivity extends AppCompatActivity {
                     GoogleSignIn.getLastSignedInAccount(this),
                     getFitnessOptions());
         }else {
-
-            accessHistoryDistanceData(this);
+            accessHistoryDistanceData(this, mGoogleFitListener);
         }
     }
 
-    public void setUserName(GoogleSignInAccount account){
-        FragmentManager fragmentManager = getSupportFragmentManager();
-        MainActivityFragment fragment = (MainActivityFragment) fragmentManager.findFragmentById(R.id.main_fragment);
-        if(fragment != null && account != null){
-            fragment.setUser(account.getDisplayName());
-        }
-    }
 }

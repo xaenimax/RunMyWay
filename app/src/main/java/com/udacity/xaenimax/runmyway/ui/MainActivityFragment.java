@@ -30,8 +30,10 @@ import butterknife.ButterKnife;
 public class MainActivityFragment extends Fragment {
     private AppDatabase mAppDatabase;
 
-    @BindView(R.id.welcome_tv)
-    public TextView welcomeTextView;
+    @BindView(R.id.today_achievement_distance_tv)
+    public TextView distanceTextView;
+    @BindView(R.id.today_achievement_calory_tv)
+    public TextView caloriesTextView;
 
     public MainActivityFragment() {
     }
@@ -64,7 +66,9 @@ public class MainActivityFragment extends Fragment {
 
     }
 
-    public void setUser(String displayName) {
-        welcomeTextView.setText(String.format(getString(R.string.welcome_string_format), displayName));
+    public void setUserInfo(float distance, long Kcal) {
+        caloriesTextView.setText(String.format(getString(R.string.calories), Kcal));
+        distanceTextView.setText(String.format(getString(R.string.distance), distance));
+
     }
 }
