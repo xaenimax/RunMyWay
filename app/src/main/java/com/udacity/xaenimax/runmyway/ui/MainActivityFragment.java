@@ -11,15 +11,17 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.TextView;
 
 import com.udacity.xaenimax.runmyway.R;
-import com.udacity.xaenimax.runmyway.model.Configuration;
 import com.udacity.xaenimax.runmyway.model.RunSession;
 import com.udacity.xaenimax.runmyway.model.dao.AppDatabase;
-import com.udacity.xaenimax.runmyway.model.dao.AppExecutor;
 import com.udacity.xaenimax.runmyway.viewmodel.MainViewModel;
 
 import java.util.List;
+
+import butterknife.BindView;
+import butterknife.ButterKnife;
 
 
 /**
@@ -28,13 +30,18 @@ import java.util.List;
 public class MainActivityFragment extends Fragment {
     private AppDatabase mAppDatabase;
 
+    @BindView(R.id.welcome_tv)
+    public TextView welcomeTextView;
+
     public MainActivityFragment() {
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        return inflater.inflate(R.layout.fragment_main, container, false);
+        View view = inflater.inflate(R.layout.fragment_main, container, false);
+        ButterKnife.bind(this, view);
+        return view;
     }
 
     @Override
@@ -55,5 +62,9 @@ public class MainActivityFragment extends Fragment {
         super.onActivityCreated(savedInstanceState);
         mAppDatabase = AppDatabase.getInstance(getActivity());
 
+    }
+
+    public void setUser(String displayName) {
+        welcomeTextView.setText(String.format(getString(R.string.welcome_string_format), displayName));
     }
 }

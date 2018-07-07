@@ -3,38 +3,26 @@ package com.udacity.xaenimax.runmyway.ui;
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
+import android.support.v4.app.FragmentManager;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
-import android.util.Log;
 import android.view.View;
 
 import com.google.android.gms.auth.api.signin.GoogleSignIn;
-import com.google.android.gms.fitness.Fitness;
-import com.google.android.gms.fitness.FitnessOptions;
-import com.google.android.gms.fitness.data.DataType;
-import com.google.android.gms.fitness.request.DataReadRequest;
-import com.google.android.gms.fitness.result.DataReadResponse;
-import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.OnFailureListener;
-import com.google.android.gms.tasks.OnSuccessListener;
-import com.google.android.gms.tasks.Task;
+import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
+import com.google.android.gms.auth.api.signin.GoogleSignInClient;
+import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
 import com.udacity.xaenimax.runmyway.R;
-import com.udacity.xaenimax.runmyway.network.GoogleFitManager;
-
-import java.util.Calendar;
-import java.util.Date;
-import java.util.Scanner;
-import java.util.concurrent.TimeUnit;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
-import static com.udacity.xaenimax.runmyway.network.GoogleFitManager.GOOGLE_FIT_PERMISSIONS_REQUEST_CODE;
-import static com.udacity.xaenimax.runmyway.network.GoogleFitManager.accessGoogleFit;
+import static com.udacity.xaenimax.runmyway.network.GoogleFitService.GOOGLE_FIT_PERMISSIONS_REQUEST_CODE;
+import static com.udacity.xaenimax.runmyway.network.GoogleFitService.accessHistoryDistanceData;
+import static com.udacity.xaenimax.runmyway.network.GoogleFitService.getFitnessOptions;
 
 public class MainActivity extends AppCompatActivity {
     private static final String LOG_TAG = AppCompatActivity.class.getSimpleName();
@@ -59,17 +47,42 @@ public class MainActivity extends AppCompatActivity {
                 
             }
         });
-
-        GoogleFitManager.checkPermission(this);
     }
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         if (resultCode == Activity.RESULT_OK && requestCode == GOOGLE_FIT_PERMISSIONS_REQUEST_CODE) {
-            accessGoogleFit(this);
-        }else {
+            accessHistoryDistanceData(this);
+        } else {
             Snackbar.make(mFloatingActionButton, getString(R.string.google_account_alert), Snackbar.LENGTH_LONG).show();
+        }
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        checkPermission();
+    }
+
+    public void checkPermission(){
+        if(!GoogleSignIn.hasPermissions(GoogleSignIn.getLastSignedInAccount(this), getFitnessOptions())) {
+            GoogleSignIn.requestPermissions(
+                    this,
+                    GOOGLE_FIT_PERMISSIONS_REQUEST_CODE,
+                    GoogleSignIn.getLastSignedInAccount(this),
+                    getFitnessOptions());
+        }else {
+
+            accessHistoryDistanceData(this);
+        }
+    }
+
+    public void setUserName(GoogleSignInAccount account){
+        FragmentManager fragmentManager = getSupportFragmentManager();
+        MainActivityFragment fragment = (MainActivityFragment) fragmentManager.findFragmentById(R.id.main_fragment);
+        if(fragment != null && account != null){
+            fragment.setUser(account.getDisplayName());
         }
     }
 }

@@ -18,9 +18,44 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
     <TextView
+        android:id="@+id/today_achievement_tv"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        app:layout_constraintStart_toStartOf="@id/"
+        android:layout_marginTop="@dimen/sixteen_dp"
+        android:text="@string/today_achievements"
+        android:textSize="@dimen/sub_title_text_size"
+        app:layout_constraintStart_toStartOf="@id/welcome_tv"
+        app:layout_constraintTop_toBottomOf="@id/welcome_tv"
+        />
+    <TextView
+        android:id="@+id/today_achievement_distance_tv"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/sixteen_dp"
+        android:text="@string/today_achievements"
+        android:textSize="@dimen/sub_title_text_size"
+        app:layout_constraintStart_toStartOf="@id/welcome_tv"
+        app:layout_constraintTop_toBottomOf="@id/today_achievement_tv"
+        />
+    <TextView
+        android:id="@+id/today_achievement_calory_tv"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/sixteen_dp"
+        android:text="@string/today_achievements"
+        android:textSize="@dimen/sub_title_text_size"
+        app:layout_constraintStart_toStartOf="@id/welcome_tv"
+        app:layout_constraintTop_toBottomOf="@id/today_achievement_distance_tv"
+        />
+    <TextView
+        android:id="@+id/today_achievement_time_tv"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/sixteen_dp"
+        android:text="@string/today_achievements"
+        android:textSize="@dimen/sub_title_text_size"
+        app:layout_constraintStart_toStartOf="@id/welcome_tv"
+        app:layout_constraintTop_toBottomOf="@id/today_achievement_calory_tv"
         />
 
 </android.support.constraint.ConstraintLayout>
