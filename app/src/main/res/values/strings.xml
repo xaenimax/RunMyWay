@@ -10,4 +10,15 @@
     <string name="distance">Distance: %.2f Km</string>
     <string name="google_fit_failed">Failed to load Fitness data</string>
     <string name="last_session">Last Session:</string>
+    <string name="no_run_session">You don\'t have any sessions yet</string>
+    <string name="title_activity_add_configuration">New running setup</string>
+    <string name="total_minutes">Total time:</string>
+    <string name="total_walking">Total time walking:</string>
+    <string name="total_running">Total time running</string>
+    <string name="add">Add</string>
+    <string name="minutes">Minutes</string>
+    <string-array name="running_mode">
+        <item>Walk</item>
+        <item>Run</item>
+    </string-array>
 </resources>

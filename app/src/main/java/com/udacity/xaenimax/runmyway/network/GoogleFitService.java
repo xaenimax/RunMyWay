@@ -54,7 +54,12 @@ public class GoogleFitService{
         return fitnessOptions;
     }
 
-    public static void accessHistoryDistanceData(Context context, final GoogleFitListener activitiesListener) {
+    /**
+     * Retrieve History in Google Fitness account and sends it back to the listener
+     * @param context
+     * @param activitiesListener
+     */
+    public static void accessHistoryData(Context context, final GoogleFitListener activitiesListener) {
         Calendar cal = Calendar.getInstance();
         cal.setTime(new Date());
         long endTime = cal.getTimeInMillis();

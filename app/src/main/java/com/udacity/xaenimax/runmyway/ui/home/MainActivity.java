@@ -1,4 +1,4 @@
-package com.udacity.xaenimax.runmyway.ui;
+package com.udacity.xaenimax.runmyway.ui.home;
 
 import android.app.Activity;
 import android.content.Intent;
@@ -12,17 +12,15 @@ import android.support.v7.widget.Toolbar;
 import android.view.View;
 
 import com.google.android.gms.auth.api.signin.GoogleSignIn;
-import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
-import com.google.android.gms.auth.api.signin.GoogleSignInClient;
-import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
 import com.udacity.xaenimax.runmyway.R;
 import com.udacity.xaenimax.runmyway.network.GoogleFitService;
+import com.udacity.xaenimax.runmyway.ui.addconfiguration.AddConfigurationActivity;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
 import static com.udacity.xaenimax.runmyway.network.GoogleFitService.GOOGLE_FIT_PERMISSIONS_REQUEST_CODE;
-import static com.udacity.xaenimax.runmyway.network.GoogleFitService.accessHistoryDistanceData;
+import static com.udacity.xaenimax.runmyway.network.GoogleFitService.accessHistoryData;
 import static com.udacity.xaenimax.runmyway.network.GoogleFitService.getFitnessOptions;
 
 public class MainActivity extends AppCompatActivity {
@@ -47,7 +45,7 @@ public class MainActivity extends AppCompatActivity {
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                
+                startActivity(new Intent(MainActivity.this, AddConfigurationActivity.class));
             }
         });
 
@@ -55,14 +53,11 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void setUpListeners() {
+        //Setup the GoogleFitService Listener, once it retrieve data from Fitness api
         mGoogleFitListener = new GoogleFitService.GoogleFitListener() {
             @Override
             public void onDailyActivitiesListener(float distance, long Kcal) {
-                FragmentManager fragmentManager = getSupportFragmentManager();
-                MainActivityFragment fragment = (MainActivityFragment) fragmentManager.findFragmentById(R.id.main_fragment);
-                if(fragment != null){
-                    fragment.setUserInfo(distance, Kcal);
-                }
+                setFragmentsParameter(distance, Kcal);
             }
 
             @Override
@@ -77,12 +72,27 @@ public class MainActivity extends AppCompatActivity {
         };
     }
 
+    /**
+     * Retrieve the main fragment and send parameters to show in UI
+     * @param distance
+     * @param Kcal
+     */
+    private void setFragmentsParameter(float distance, long Kcal) {
+        FragmentManager fragmentManager = getSupportFragmentManager();
+        MainActivityFragment fragment = (MainActivityFragment) fragmentManager.findFragmentById(R.id.main_fragment);
+        if(fragment != null){
+            fragment.setUserInfo(distance, Kcal);
+        }
+    }
+
     @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
+        //Check if user has given permission to access Fitness data
         if (resultCode == Activity.RESULT_OK && requestCode == GOOGLE_FIT_PERMISSIONS_REQUEST_CODE) {
-            accessHistoryDistanceData(this, mGoogleFitListener);
+            accessHistoryData(this, mGoogleFitListener);
         } else {
+            setFragmentsParameter(0,0);
             Snackbar.make(mFloatingActionButton, getString(R.string.google_account_alert), Snackbar.LENGTH_LONG).show();
         }
     }
@@ -101,7 +111,7 @@ public class MainActivity extends AppCompatActivity {
                     GoogleSignIn.getLastSignedInAccount(this),
                     getFitnessOptions());
         }else {
-            accessHistoryDistanceData(this, mGoogleFitListener);
+            accessHistoryData(this, mGoogleFitListener);
         }
     }
 

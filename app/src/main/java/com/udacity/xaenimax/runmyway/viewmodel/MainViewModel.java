@@ -4,11 +4,13 @@ import android.app.Application;
 import android.arch.lifecycle.AndroidViewModel;
 import android.arch.lifecycle.LiveData;
 import android.support.annotation.NonNull;
+import android.util.Log;
 
 import com.udacity.xaenimax.runmyway.model.RunSession;
 import com.udacity.xaenimax.runmyway.model.dao.AppDatabase;
 
 public class MainViewModel extends AndroidViewModel {
+    private static final String LOG_TAG = MainViewModel.class.getSimpleName();
 
     public LiveData<RunSession> getRunSession() {
         return mRunSession;
@@ -18,6 +20,8 @@ public class MainViewModel extends AndroidViewModel {
 
     public MainViewModel(@NonNull Application application) {
         super(application);
-        mRunSession = AppDatabase.getInstance(this.getApplication()).runSessionDao().getLastRunSession();
+        AppDatabase appDatabase =  AppDatabase.getInstance(this.getApplication());
+        Log.d(LOG_TAG, "Retrieving last run session from Room DB");
+        mRunSession = appDatabase.runSessionDao().getLastRunSession();
     }
 }

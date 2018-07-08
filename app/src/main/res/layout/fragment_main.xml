@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".ui.MainActivityFragment"
+    tools:context=".ui.home.MainActivityFragment"
     tools:showIn="@layout/activity_main">
 
     <TextView
@@ -60,7 +60,7 @@
         app:layout_constraintTop_toBottomOf="@id/today_achievement_calory_tv"
         />
     <TextView
-        android:id="@+id/today_achievement_time_tv"
+        android:id="@+id/last_session_recap_tv"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="@dimen/sixteen_dp"
