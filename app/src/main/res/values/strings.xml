@@ -5,8 +5,9 @@
     <string name="google_account_alert">You need to sign-in with your Google account to save your data</string>
     <string name="welcome_string">Hello!</string>
     <string name="look_at_activies">Look at your daily activities</string>
-    <string name="calories">Calories: %d%n Kcal</string>
+    <string name="calories">Calories: %d Kcal</string>
     <string name="time">Time: %s </string>
     <string name="distance">Distance: %.2f Km</string>
     <string name="google_fit_failed">Failed to load Fitness data</string>
+    <string name="last_session">Last Session:</string>
 </resources>
