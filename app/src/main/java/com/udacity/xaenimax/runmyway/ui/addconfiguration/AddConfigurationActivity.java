@@ -33,6 +33,12 @@ public class AddConfigurationActivity extends AppCompatActivity {
         }
 
         configurationStepRecyclerView.setLayoutManager(mLayoutManager);
+
+        setupViewModel();
+    }
+
+    private void setupViewModel() {
+
     }
 
     @Override

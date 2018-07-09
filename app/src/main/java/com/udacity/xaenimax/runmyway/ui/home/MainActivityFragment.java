@@ -13,7 +13,7 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import com.udacity.xaenimax.runmyway.R;
-import com.udacity.xaenimax.runmyway.model.RunSession;
+import com.udacity.xaenimax.runmyway.model.entity.RunSession;
 import com.udacity.xaenimax.runmyway.viewmodel.MainViewModel;
 
 import butterknife.BindView;

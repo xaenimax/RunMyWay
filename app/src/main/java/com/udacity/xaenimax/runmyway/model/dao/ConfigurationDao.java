@@ -8,7 +8,7 @@ import android.arch.persistence.room.OnConflictStrategy;
 import android.arch.persistence.room.Query;
 import android.arch.persistence.room.Update;
 
-import com.udacity.xaenimax.runmyway.model.Configuration;
+import com.udacity.xaenimax.runmyway.model.entity.Configuration;
 
 import java.util.List;
 

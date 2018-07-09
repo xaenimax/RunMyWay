@@ -3,14 +3,13 @@ package com.udacity.xaenimax.runmyway.model.dao;
 import android.arch.persistence.room.Database;
 import android.arch.persistence.room.Room;
 import android.arch.persistence.room.RoomDatabase;
-import android.arch.persistence.room.TypeConverter;
 import android.arch.persistence.room.TypeConverters;
 import android.content.Context;
 import android.util.Log;
 
-import com.udacity.xaenimax.runmyway.model.Configuration;
-import com.udacity.xaenimax.runmyway.model.ConfigurationStep;
-import com.udacity.xaenimax.runmyway.model.RunSession;
+import com.udacity.xaenimax.runmyway.model.entity.Configuration;
+import com.udacity.xaenimax.runmyway.model.entity.ConfigurationStep;
+import com.udacity.xaenimax.runmyway.model.entity.RunSession;
 
 @Database(entities = {Configuration.class, ConfigurationStep.class, RunSession.class}, version = 2, exportSchema = false)
 @TypeConverters(DateConverter.class)

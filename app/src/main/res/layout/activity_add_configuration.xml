@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".ui.addconfiguration.AddConfigurationActivity">
-    <ScrollView
+    <android.support.v4.widget.NestedScrollView
         android:id="@+id/scrollbar"
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
@@ -104,6 +104,7 @@
                     android:textSize="@dimen/normal_text_size"
                     android:layout_marginStart="@dimen/eight_dp"
                     android:text="@string/add"
+                    android:layout_gravity="end"
                     />
             </LinearLayout>
             <android.support.v7.widget.RecyclerView
@@ -112,6 +113,6 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"/>
         </LinearLayout>
-    </ScrollView>
+    </android.support.v4.widget.NestedScrollView>
 
 </android.support.constraint.ConstraintLayout>

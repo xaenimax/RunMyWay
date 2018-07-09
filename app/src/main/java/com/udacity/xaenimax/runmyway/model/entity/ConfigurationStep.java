@@ -1,4 +1,4 @@
-package com.udacity.xaenimax.runmyway.model;
+package com.udacity.xaenimax.runmyway.model.entity;
 
 import android.arch.persistence.room.ColumnInfo;
 import android.arch.persistence.room.Entity;

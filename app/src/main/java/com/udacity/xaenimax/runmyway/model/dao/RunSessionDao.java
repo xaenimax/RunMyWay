@@ -7,7 +7,7 @@ import android.arch.persistence.room.Insert;
 import android.arch.persistence.room.Query;
 import android.arch.persistence.room.Update;
 
-import com.udacity.xaenimax.runmyway.model.RunSession;
+import com.udacity.xaenimax.runmyway.model.entity.RunSession;
 
 import java.util.List;
 
