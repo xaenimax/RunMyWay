@@ -21,7 +21,7 @@ public class InjectorUtils {
                 executors,
                 database.configurationStepDao());
     }
-
+/*
     public static AddConfigurationViewFactory provideAddConfigurationViewModelFactory(Context context, int configurationId) {
         RunMyWayRepository repository = provideRepository(context.getApplicationContext());
         return new AddConfigurationViewFactory(repository, configurationId);
@@ -31,5 +31,5 @@ public class InjectorUtils {
         SunshineRepository repository = provideRepository(context.getApplicationContext());
         return new MainViewModelFactory(repository);
     }
-
+*/
 }

@@ -4,24 +4,58 @@ import android.arch.persistence.room.ColumnInfo;
 import android.arch.persistence.room.Entity;
 import android.arch.persistence.room.Ignore;
 import android.arch.persistence.room.PrimaryKey;
+import android.os.Parcel;
+import android.os.Parcelable;
+
+import java.util.Date;
 
 @Entity(tableName = "configuration")
-public class Configuration {
+public class Configuration implements Parcelable{
     @PrimaryKey(autoGenerate = true)
     public int id;
-    public int position;
     public String name;
+    @ColumnInfo(name = "insert_date")
+    public Date insertDate;
 
     @Ignore
-    public Configuration(int position, String name){
-        this.position = position;
+    public Configuration(String name, Date insertDate){
+        this.insertDate = insertDate;
         this.name = name;
     }
 
-    public Configuration(int id, int position, String name){
+    public Configuration(int id, Date insertDate, String name){
         this.id = id;
-        this.position = position;
+        this.insertDate = insertDate;
         this.name = name;
     }
 
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    @Override
+    public void writeToParcel(Parcel dest, int flags) {
+        dest.writeInt(this.id);
+        dest.writeLong(this.insertDate.getTime());
+        dest.writeString(this.name);
+    }
+
+    @Ignore
+    public static Creator<Configuration> CREATOR = new Creator<Configuration>() {
+        @Override
+        public Configuration createFromParcel(Parcel source) {
+            Configuration configuration = new Configuration(
+                    source.readInt(),
+                    new Date(source.readLong()),
+                    source.readString()
+            );
+            return configuration;
+        }
+
+        @Override
+        public Configuration[] newArray(int size) {
+            return new Configuration[0];
+        }
+    };
 }

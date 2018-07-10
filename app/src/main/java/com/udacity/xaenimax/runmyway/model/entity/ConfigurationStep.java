@@ -4,9 +4,11 @@ import android.arch.persistence.room.ColumnInfo;
 import android.arch.persistence.room.Entity;
 import android.arch.persistence.room.Ignore;
 import android.arch.persistence.room.PrimaryKey;
+import android.os.Parcel;
+import android.os.Parcelable;
 
 @Entity(tableName = "configuration_step")
-public class ConfigurationStep {
+public class ConfigurationStep implements Parcelable {
     @PrimaryKey(autoGenerate = true)
     public int id;
     public int position;
@@ -31,4 +33,37 @@ public class ConfigurationStep {
         this.stepType = stepType;
         this.configurationId = configurationId;
     }
+
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    @Override
+    public void writeToParcel(Parcel dest, int flags) {
+        dest.writeInt(this.id);
+        dest.writeInt(this.position);
+        dest.writeInt(this.duration);
+        dest.writeString(this.stepType);
+        dest.writeInt(this.configurationId);
+    }
+
+    @Ignore
+    public static Creator<ConfigurationStep> CREATOR = new Creator<ConfigurationStep>() {
+        @Override
+        public ConfigurationStep createFromParcel(Parcel source) {
+            return new ConfigurationStep(
+                    source.readInt(),
+                    source.readInt(),
+                    source.readInt(),
+                    source.readString(),
+                    source.readInt()
+            );
+        }
+
+        @Override
+        public ConfigurationStep[] newArray(int size) {
+            return new ConfigurationStep[0];
+        }
+    };
 }

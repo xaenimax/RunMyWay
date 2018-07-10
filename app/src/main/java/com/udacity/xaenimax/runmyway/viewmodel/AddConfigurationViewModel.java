@@ -27,8 +27,6 @@ public class AddConfigurationViewModel extends AndroidViewModel {
         return mConfiguration;
     }
 
-    public LiveData<List<ConfigurationStep>>getConfugurationSteps(){
+
 
     }
-
-}

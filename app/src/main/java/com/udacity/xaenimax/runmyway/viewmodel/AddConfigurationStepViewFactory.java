@@ -8,7 +8,8 @@ import com.udacity.xaenimax.runmyway.model.RunMyWayRepository;
 import com.udacity.xaenimax.runmyway.model.dao.AppDatabase;
 
 public class AddConfigurationStepViewFactory extends ViewModelProvider.NewInstanceFactory {
-    //private final AppDatabase mAppDatabase;
+    /*
+    private final AppDatabase mAppDatabase;
     private final int mConfigurationId;
 
     public AddConfigurationStepViewFactory(RunMyWayRepository repository, int configurationStepId){
@@ -21,4 +22,5 @@ public class AddConfigurationStepViewFactory extends ViewModelProvider.NewInstan
     public <T extends ViewModel> T create(@NonNull Class<T> modelClass) {
         return (T) new AddConfigurationStepViewModel(mAppDatabase, mConfigurationId);
     }
+    */
 }
