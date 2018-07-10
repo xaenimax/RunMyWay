@@ -7,6 +7,7 @@ import com.udacity.xaenimax.runmyway.model.dao.AppExecutor;
 import com.udacity.xaenimax.runmyway.model.dao.ConfigurationDao;
 import com.udacity.xaenimax.runmyway.model.dao.ConfigurationStepDao;
 import com.udacity.xaenimax.runmyway.model.dao.RunSessionDao;
+import com.udacity.xaenimax.runmyway.model.entity.Configuration;
 import com.udacity.xaenimax.runmyway.model.entity.ConfigurationStep;
 import com.udacity.xaenimax.runmyway.model.entity.RunSession;
 
@@ -63,7 +64,13 @@ public class RunMyWayRepository {
         return mConfigurationStepDao.listAllConfigurationSteps(configurationId);
     }
 
-    /**
+
+/**
+    public void insertNewConfiguration(Configuration configuration){
+        return mConfigurationDao.insertConfiguration(configu);
+    }
+
+
      * Deletes old weather data because we don't need to keep multiple days' data
 
     private void deleteOldData() {
