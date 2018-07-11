@@ -35,7 +35,7 @@ public class AddConfigurationActivity extends AppCompatActivity {
     private RecyclerView.LayoutManager mLayoutManager;
     private Parcelable mLayoutParcelable;
     private Configuration mConfiguration;
-    private ArrayList<ConfigurationStep> mConfigurationSteps;
+    private ArrayList<ConfigurationStep> mConfigurationSteps = new ArrayList<>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -58,6 +58,7 @@ public class AddConfigurationActivity extends AppCompatActivity {
         if (savedInstanceState != null && savedInstanceState.containsKey(CONFIGURATION_OBJECT)) {
             mConfigurationSteps = savedInstanceState.getParcelableArrayList(CONFIGURATION_STEP);
         }
+        configurationStepRecyclerView.setAdapter(new ConfigurationStepAdapter(mConfigurationSteps));
     }
 
     @Override
