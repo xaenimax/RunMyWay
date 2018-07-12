@@ -11,7 +11,8 @@ import com.udacity.xaenimax.runmyway.R;
 
 @Entity(tableName = "configuration_step")
 public class ConfigurationStep implements Parcelable {
-    public enum StepType {Walk, Run};
+    public static final String STEP_TYPE_WALK = "Walk";
+    public static final String STEP_TYPE_RUN = "Run";
 
     @PrimaryKey(autoGenerate = true)
     public int id;

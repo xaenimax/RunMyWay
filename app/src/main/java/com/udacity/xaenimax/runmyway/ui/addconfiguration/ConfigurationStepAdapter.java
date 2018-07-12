@@ -57,8 +57,8 @@ public class ConfigurationStepAdapter extends RecyclerView.Adapter<Configuration
         }
 
         public void bindData(ConfigurationStep step) {
-            activityImageView.setImageResource(step.stepType.equals(ConfigurationStep.StepType.Walk) ? R.drawable.walker : R.drawable.runner);
-            stepTextView.setText(String.format(activityImageView.getContext().getString(R.string.action_imageview)));
+            activityImageView.setImageResource(step.stepType.equals(ConfigurationStep.STEP_TYPE_WALK) ? R.mipmap.walker : R.mipmap.runner);
+            stepTextView.setText(String.format(activityImageView.getContext().getString(R.string.total_time_value), step.duration));
         }
     }
 }
