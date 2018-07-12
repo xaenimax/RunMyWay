@@ -4,11 +4,15 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:layout_marginStart="@dimen/sixteen_dp"
+    android:layout_marginEnd="@dimen/sixteen_dp"
     tools:context=".ui.addconfiguration.AddConfigurationActivity">
     <android.support.v4.widget.NestedScrollView
         android:id="@+id/scrollbar"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="0dp"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintBottom_toTopOf="@id/confirm_button">
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -16,74 +20,75 @@
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="horizontal">
+                android:orientation="horizontal"
+                android:layout_marginTop="@dimen/eight_dp">
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="@string/total_minutes"
                     android:textSize="@dimen/normal_text_size"
                     android:textStyle="bold"
-                    android:layout_margin="@dimen/eight_dp"
                     />
                 <TextView
+                    android:id="@+id/total_time_tv"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:textSize="@dimen/normal_text_size"
-                    android:text="@string/total_minutes"
-                    android:layout_marginTop="@dimen/eight_dp"
                     />
             </LinearLayout>
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="horizontal">
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="@string/total_running"
-                    android:textStyle="bold"
-                    android:textSize="@dimen/normal_text_size"
-                    android:layout_margin="@dimen/eight_dp"
-                    />
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:textSize="@dimen/normal_text_size"
-                    android:text="@string/total_running"
-                    android:layout_marginTop="@dimen/eight_dp"
-                    />
-            </LinearLayout>
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="horizontal">
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:textSize="@dimen/normal_text_size"
-                    android:text="@string/total_walking"
-                    android:textStyle="bold"
-                    android:layout_margin="@dimen/eight_dp"
-                    />
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:textSize="@dimen/normal_text_size"
-                    android:text="@string/total_walking"
-                    android:layout_marginTop="@dimen/eight_dp"
-                    />
-            </LinearLayout>
-            <View
-                android:layout_margin="@dimen/eight_dp"
-                android:layout_width="match_parent"
-                android:layout_height="2dp"
-                android:background="@android:color/darker_gray"/>
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="horizontal"
-                android:layout_margin="@dimen/eight_dp">
+                android:layout_marginTop="@dimen/eight_dp">
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/total_running"
+                    android:textStyle="bold"
+                    android:textSize="@dimen/normal_text_size"
+                    />
+                <TextView
+                    android:id="@+id/total_running_tv"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textSize="@dimen/normal_text_size"
+                    android:text="@string/total_running"
+                    />
+            </LinearLayout>
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:layout_marginTop="@dimen/eight_dp">
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textSize="@dimen/normal_text_size"
+                    android:text="@string/total_walking"
+                    android:textStyle="bold"
+                    />
+                <TextView
+                    android:id="@+id/total_walking_tv"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textSize="@dimen/normal_text_size"
+                    android:text="@string/total_walking"
+                    />
+            </LinearLayout>
+            <View
+                android:layout_marginTop="@dimen/eight_dp"
+                android:layout_marginBottom="@dimen/eight_dp"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/one_dp"
+                android:background="@android:color/holo_blue_dark"/>
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:layout_marginTop="@dimen/eight_dp">
                 <EditText
+                    android:id="@+id/minutes_et"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:inputType="number"
@@ -99,20 +104,31 @@
                     android:entries="@array/running_mode"
                     />
                 <Button
+                    android:id="@+id/add_button"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:textSize="@dimen/normal_text_size"
                     android:layout_marginStart="@dimen/eight_dp"
                     android:text="@string/add"
                     android:layout_gravity="end"
-                    />
+
+                                        />
             </LinearLayout>
             <android.support.v7.widget.RecyclerView
                 android:id="@+id/run_step_rv"
-                android:layout_margin="@dimen/eight_dp"
+                android:layout_marginTop="@dimen/eight_dp"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"/>
         </LinearLayout>
     </android.support.v4.widget.NestedScrollView>
-
+    <Button
+        android:id="@+id/confirm_button"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/colorAccent"
+        android:textColor="@android:color/white"
+        android:text="@string/confirm"
+        android:layout_marginTop="@dimen/eight_dp"
+        android:layout_marginBottom="@dimen/eight_dp"
+        app:layout_constraintBottom_toBottomOf="parent"/>
 </android.support.constraint.ConstraintLayout>

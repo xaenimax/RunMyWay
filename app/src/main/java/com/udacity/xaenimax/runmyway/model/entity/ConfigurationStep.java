@@ -7,8 +7,12 @@ import android.arch.persistence.room.PrimaryKey;
 import android.os.Parcel;
 import android.os.Parcelable;
 
+import com.udacity.xaenimax.runmyway.R;
+
 @Entity(tableName = "configuration_step")
 public class ConfigurationStep implements Parcelable {
+    public enum StepType {Walk, Run};
+
     @PrimaryKey(autoGenerate = true)
     public int id;
     public int position;
@@ -17,6 +21,13 @@ public class ConfigurationStep implements Parcelable {
     public String stepType;
     @ColumnInfo(name = "id_configuration")
     public int configurationId;
+
+    @Ignore
+    public ConfigurationStep(int duration, String stepType){
+        this.position = 0;
+        this.duration = duration;
+        this.stepType = stepType;
+    }
 
     @Ignore
     public ConfigurationStep(int position, int duration, String stepType, int configurationId){

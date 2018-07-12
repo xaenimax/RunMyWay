@@ -6,6 +6,11 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.text.Editable;
+import android.view.View;
+import android.widget.Button;
+import android.widget.EditText;
+import android.widget.Spinner;
 
 import com.udacity.xaenimax.runmyway.R;
 import com.udacity.xaenimax.runmyway.model.entity.Configuration;
@@ -28,14 +33,21 @@ public class AddConfigurationActivity extends AppCompatActivity {
     private static final String CONFIGURATION_OBJECT = "configuration_object";
     private static final String CONFIGURATION_STEP = "configuration_step";
 
-
+    @BindView(R.id.add_button)
+    Button addButton;
     @BindView(R.id.run_step_rv)
     RecyclerView configurationStepRecyclerView;
+    @BindView(R.id.minutes_et)
+    EditText minuteValueEditText;
+    @BindView(R.id.step_spinner)
+    Spinner stepSpinner;
+
 
     private RecyclerView.LayoutManager mLayoutManager;
     private Parcelable mLayoutParcelable;
     private Configuration mConfiguration;
     private ArrayList<ConfigurationStep> mConfigurationSteps = new ArrayList<>();
+    private ConfigurationStepAdapter mConfigurationStepAdapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -58,7 +70,29 @@ public class AddConfigurationActivity extends AppCompatActivity {
         if (savedInstanceState != null && savedInstanceState.containsKey(CONFIGURATION_OBJECT)) {
             mConfigurationSteps = savedInstanceState.getParcelableArrayList(CONFIGURATION_STEP);
         }
-        configurationStepRecyclerView.setAdapter(new ConfigurationStepAdapter(mConfigurationSteps));
+        mConfigurationStepAdapter = new ConfigurationStepAdapter(mConfigurationSteps);
+        configurationStepRecyclerView.setAdapter(mConfigurationStepAdapter);
+
+        setupListeners();
+    }
+
+    private void setupListeners() {
+        addButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Editable text = minuteValueEditText.getText();
+                    if(text != null && !text.toString().equals("")){
+                    String stepType = (String) stepSpinner.getSelectedItem();
+                    int minutes = Integer.parseInt(minuteValueEditText.getText().toString());
+                    ConfigurationStep step = new ConfigurationStep(minutes, stepType);
+                    mConfigurationSteps.add(step);
+                    minuteValueEditText.setText("");
+                    mConfigurationStepAdapter = new ConfigurationStepAdapter(mConfigurationSteps);
+                    configurationStepRecyclerView.swapAdapter(mConfigurationStepAdapter, true);
+
+                }
+            }
+        });
     }
 
     @Override

@@ -17,6 +17,8 @@
     <string name="total_running">Total time running</string>
     <string name="add">Add</string>
     <string name="minutes">Minutes</string>
+    <string name="confirm">CONFIRM</string>
+    <string name="action_imageview">Man doing an activity</string>
     <string-array name="running_mode">
         <item>Walk</item>
         <item>Run</item>
