@@ -64,19 +64,32 @@ public class RunMyWayRepository {
         return mConfigurationStepDao.listAllConfigurationSteps(configurationId);
     }
 
-    public long insertNewConfiguration(Configuration newConfiguration){
-        return mConfigurationDao.insertConfiguration(newConfiguration);
+    public void insertNewConfiguration(final Configuration newConfiguration, final OnInsertEndedListener listener){
+        mExecutors.diskIO().execute(new Runnable() {
+            @Override
+            public void run() {
+                long id =  mConfigurationDao.insertConfiguration(newConfiguration);
+                if(listener != null){
+                    listener.OnInsertEnded(id);
+                }
+            }
+        });
+
     }
 
-    public long insertNewConfigurationStep(ConfigurationStep newConfigurationStep){
-        return mConfigurationStepDao.insertConfiguration(newConfigurationStep);
+    public void insertNewConfigurationStep(final List<ConfigurationStep> newConfigurationSteps){
+        mExecutors.diskIO().execute(new Runnable() {
+            @Override
+            public void run() {
+                mConfigurationStepDao.insertAll(newConfigurationSteps);
+
+            }
+        });
     }
 
-    public void insertNewConfigurationStep(List<ConfigurationStep> newConfigurationSteps){
-        mConfigurationStepDao.insertAll(newConfigurationSteps);
+    public interface OnInsertEndedListener{
+        void OnInsertEnded(long idInserted);
     }
-
-
 /**
     public void insertNewConfiguration(Configuration configuration){
         return mConfigurationDao.insertConfiguration(configu);

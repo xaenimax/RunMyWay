@@ -3,7 +3,8 @@
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:layout_gravity="center">
+    android:layout_gravity="center"
+    android:padding="32dp">
     <TextView
         android:id="@+id/question_tv"
         android:layout_width="wrap_content"

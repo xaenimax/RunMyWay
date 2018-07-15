@@ -186,18 +186,31 @@ public class AddConfigurationActivity extends AppCompatActivity implements SaveC
 
     @Override
     public void onSaveButtonPressed(String configName) {
-        RunMyWayRepository runMyWayRepository = InjectorUtils.provideRepository(this);
+        final RunMyWayRepository runMyWayRepository = InjectorUtils.provideRepository(this);
         Configuration newConfiguration = new Configuration(configName, new Date());
-        long idInserted = runMyWayRepository.insertNewConfiguration(newConfiguration);
-        for (int i = 0 ; i < mConfigurationSteps.size();  i++){
-            ConfigurationStep step = mConfigurationSteps.get(i);
-            step.configurationId = idInserted;
-            step.position = i;
-        }
+        runMyWayRepository.insertNewConfiguration(newConfiguration, new RunMyWayRepository.OnInsertEndedListener() {
+            @Override
+            public void OnInsertEnded(long idInserted) {
+                for (int i = 0 ; i < mConfigurationSteps.size();  i++){
+                    ConfigurationStep step = mConfigurationSteps.get(i);
+                    step.configurationId = idInserted;
+                    step.position = i;
+                }
+                runMyWayRepository.insertNewConfigurationStep(mConfigurationSteps);
+
+                runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        
+                    }
+                });
+            }
+        });
+
     }
 
     @Override
     public void onCancelButtonPressed() {
-        //saveConfigurationDialogFragment.dismiss();
+        saveConfigurationDialogFragment.dismiss();
     }
 }
