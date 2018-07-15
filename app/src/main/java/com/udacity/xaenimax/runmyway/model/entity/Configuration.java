@@ -12,7 +12,7 @@ import java.util.Date;
 @Entity(tableName = "configuration")
 public class Configuration implements Parcelable{
     @PrimaryKey(autoGenerate = true)
-    public int id;
+    public long id;
     public String name;
     @ColumnInfo(name = "insert_date")
     public Date insertDate;
@@ -23,7 +23,7 @@ public class Configuration implements Parcelable{
         this.name = name;
     }
 
-    public Configuration(int id, Date insertDate, String name){
+    public Configuration(long id, Date insertDate, String name){
         this.id = id;
         this.insertDate = insertDate;
         this.name = name;
@@ -36,7 +36,7 @@ public class Configuration implements Parcelable{
 
     @Override
     public void writeToParcel(Parcel dest, int flags) {
-        dest.writeInt(this.id);
+        dest.writeLong(this.id);
         dest.writeLong(this.insertDate.getTime());
         dest.writeString(this.name);
     }
@@ -46,7 +46,7 @@ public class Configuration implements Parcelable{
         @Override
         public Configuration createFromParcel(Parcel source) {
             Configuration configuration = new Configuration(
-                    source.readInt(),
+                    source.readLong(),
                     new Date(source.readLong()),
                     source.readString()
             );

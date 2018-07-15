@@ -8,6 +8,7 @@ import android.arch.persistence.room.OnConflictStrategy;
 import android.arch.persistence.room.Query;
 import android.arch.persistence.room.Update;
 
+import com.udacity.xaenimax.runmyway.model.entity.Configuration;
 import com.udacity.xaenimax.runmyway.model.entity.ConfigurationStep;
 
 import java.util.List;
@@ -18,7 +19,10 @@ public interface ConfigurationStepDao {
     LiveData<List<ConfigurationStep>> listAllConfigurationSteps(int configurationId);
 
     @Insert
-    void insertConfiguration(ConfigurationStep configuration);
+    long insertConfiguration(ConfigurationStep configuration);
+
+    @Insert
+    void insertAll(List<ConfigurationStep> configurationSteps);
 
     @Update(onConflict = OnConflictStrategy.REPLACE)
     void updateConfigurationStep(ConfigurationStep configuration);

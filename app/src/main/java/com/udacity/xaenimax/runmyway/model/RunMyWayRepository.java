@@ -64,6 +64,18 @@ public class RunMyWayRepository {
         return mConfigurationStepDao.listAllConfigurationSteps(configurationId);
     }
 
+    public long insertNewConfiguration(Configuration newConfiguration){
+        return mConfigurationDao.insertConfiguration(newConfiguration);
+    }
+
+    public long insertNewConfigurationStep(ConfigurationStep newConfigurationStep){
+        return mConfigurationStepDao.insertConfiguration(newConfigurationStep);
+    }
+
+    public void insertNewConfigurationStep(List<ConfigurationStep> newConfigurationSteps){
+        mConfigurationStepDao.insertAll(newConfigurationSteps);
+    }
+
 
 /**
     public void insertNewConfiguration(Configuration configuration){

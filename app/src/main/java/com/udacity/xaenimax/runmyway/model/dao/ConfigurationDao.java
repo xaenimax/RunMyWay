@@ -18,7 +18,7 @@ public interface ConfigurationDao {
     LiveData<List<Configuration>> listAllConfigurations();
 
     @Insert
-    void insertConfiguration(Configuration configuration);
+    long insertConfiguration(Configuration configuration);
 
     @Update(onConflict = OnConflictStrategy.REPLACE)
     void updateConfiguration(Configuration configuration);

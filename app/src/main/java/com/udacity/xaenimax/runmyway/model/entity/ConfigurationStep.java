@@ -2,6 +2,7 @@ package com.udacity.xaenimax.runmyway.model.entity;
 
 import android.arch.persistence.room.ColumnInfo;
 import android.arch.persistence.room.Entity;
+import android.arch.persistence.room.ForeignKey;
 import android.arch.persistence.room.Ignore;
 import android.arch.persistence.room.PrimaryKey;
 import android.os.Parcel;
@@ -21,7 +22,7 @@ public class ConfigurationStep implements Parcelable {
     @ColumnInfo(name = "step_type")
     public String stepType;
     @ColumnInfo(name = "id_configuration")
-    public int configurationId;
+    public long configurationId;
 
     @Ignore
     public ConfigurationStep(int duration, String stepType){
@@ -31,14 +32,14 @@ public class ConfigurationStep implements Parcelable {
     }
 
     @Ignore
-    public ConfigurationStep(int position, int duration, String stepType, int configurationId){
+    public ConfigurationStep(int position, int duration, String stepType, long configurationId){
         this.position = position;
         this.duration = duration;
         this.stepType = stepType;
         this.configurationId = configurationId;
     }
 
-    public ConfigurationStep(int id, int position, int duration, String stepType, int configurationId){
+    public ConfigurationStep(int id, int position, int duration, String stepType, long configurationId){
         this.id = id;
         this.position = position;
         this.duration = duration;
@@ -57,7 +58,7 @@ public class ConfigurationStep implements Parcelable {
         dest.writeInt(this.position);
         dest.writeInt(this.duration);
         dest.writeString(this.stepType);
-        dest.writeInt(this.configurationId);
+        dest.writeLong(this.configurationId);
     }
 
     @Ignore
@@ -69,7 +70,7 @@ public class ConfigurationStep implements Parcelable {
                     source.readInt(),
                     source.readInt(),
                     source.readString(),
-                    source.readInt()
+                    source.readLong()
             );
         }
 
