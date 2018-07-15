@@ -66,6 +66,7 @@ public class AddConfigurationActivity extends AppCompatActivity implements SaveC
     private ConfigurationStepAdapter mConfigurationStepAdapter;
     private int totalTime = 0, totalTimeRunning = 0, totalTimeWalking = 0;
     private SaveConfigurationDialogFragment saveConfigurationDialogFragment;
+    private String SAVE_NEW_CONFIG_FRAGMENT_TAG = "SaveConfigurationDialogFragment";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -140,7 +141,7 @@ public class AddConfigurationActivity extends AppCompatActivity implements SaveC
             public void onClick(View v) {
                 if(saveConfigurationDialogFragment == null)
                     saveConfigurationDialogFragment = new SaveConfigurationDialogFragment();
-                saveConfigurationDialogFragment.show(getSupportFragmentManager(), "SaveConfigurationDialogFragment");
+                saveConfigurationDialogFragment.show(getSupportFragmentManager(), SAVE_NEW_CONFIG_FRAGMENT_TAG);
             }
         });
     }
@@ -201,7 +202,7 @@ public class AddConfigurationActivity extends AppCompatActivity implements SaveC
                 runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
-                        
+
                     }
                 });
             }
@@ -211,6 +212,7 @@ public class AddConfigurationActivity extends AppCompatActivity implements SaveC
 
     @Override
     public void onCancelButtonPressed() {
+        saveConfigurationDialogFragment = (SaveConfigurationDialogFragment) getSupportFragmentManager().findFragmentByTag(SAVE_NEW_CONFIG_FRAGMENT_TAG);
         saveConfigurationDialogFragment.dismiss();
     }
 }

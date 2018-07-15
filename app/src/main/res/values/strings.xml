@@ -24,6 +24,7 @@
     <string name="insert_name">Insert name here</string>
     <string name="cancel">CANCEL</string>
     <string name="save">Save</string>
+    <string name="run_sesssion">Start your activity!</string>
     <string-array name="running_mode">
         <item>Walk</item>
         <item>Run</item>

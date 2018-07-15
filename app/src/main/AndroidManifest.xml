@@ -23,8 +23,11 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".ui.addconfiguration.AddConfigurationActivity"
-            android:label="@string/title_activity_add_configuration"></activity>
+        <activity
+            android:name=".ui.addconfiguration.AddConfigurationActivity"
+            android:label="@string/title_activity_add_configuration" />
+        <activity android:name=".ui.runsession.RunSessionActivity"
+            android:label="@string/run_sesssion"></activity>
     </application>
 
 </manifest>
