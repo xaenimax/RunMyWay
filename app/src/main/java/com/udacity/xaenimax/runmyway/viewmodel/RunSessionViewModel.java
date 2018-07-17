@@ -9,7 +9,7 @@ import com.udacity.xaenimax.runmyway.model.entity.ConfigurationStep;
 
 import java.util.List;
 
-class RunSessionViewModel extends ViewModel {
+public class RunSessionViewModel extends ViewModel {
 
     private final LiveData<List<ConfigurationStep>> mConfigurationSteps;
     private final RunMyWayRepository mRunMyWayRepository;

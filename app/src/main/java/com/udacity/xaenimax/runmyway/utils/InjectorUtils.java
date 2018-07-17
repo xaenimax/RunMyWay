@@ -6,6 +6,7 @@ import com.udacity.xaenimax.runmyway.model.RunMyWayRepository;
 import com.udacity.xaenimax.runmyway.model.dao.AppDatabase;
 import com.udacity.xaenimax.runmyway.model.dao.AppExecutor;
 import com.udacity.xaenimax.runmyway.viewmodel.MainViewModel;
+import com.udacity.xaenimax.runmyway.viewmodel.RunSessionViewFactory;
 
 /**
  * Provides static methods to inject the various classes needed for Sunshine
@@ -21,15 +22,9 @@ public class InjectorUtils {
                 executors,
                 database.configurationStepDao());
     }
-/*
-    public static AddConfigurationViewFactory provideAddConfigurationViewModelFactory(Context context, int configurationId) {
-        RunMyWayRepository repository = provideRepository(context.getApplicationContext());
-        return new AddConfigurationViewFactory(repository, configurationId);
-    }
 
-    public static MainViewModel provideMainActivityViewModel(Context context) {
-        SunshineRepository repository = provideRepository(context.getApplicationContext());
-        return new MainViewModelFactory(repository);
+    public static RunSessionViewFactory provideRunSessionViewModelFactory(Context applicationContext, long configId) {
+        RunMyWayRepository repository = provideRepository(applicationContext);
+        return  new RunSessionViewFactory(repository, configId);
     }
-*/
 }
