@@ -68,5 +68,15 @@
         app:layout_constraintStart_toStartOf="@id/welcome_tv"
         app:layout_constraintTop_toBottomOf="@id/last_session_tv"
         />
-
+    <ImageView
+        android:id="@+id/play_button"
+        android:layout_width="110dp"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal"
+        android:adjustViewBounds="true"
+        app:layout_constraintTop_toBottomOf="@id/last_session_recap_tv"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        android:gravity="center"
+        android:src="@mipmap/play"/>
 </android.support.constraint.ConstraintLayout>
