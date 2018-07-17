@@ -25,6 +25,9 @@
     <string name="cancel">CANCEL</string>
     <string name="save">Save</string>
     <string name="run_sesssion">Start your activity!</string>
+    <string name="attention">Attention</string>
+    <string name="gps_info_message">Please allow GPS tracking in your device settings</string>
+    <string name="ok">OK</string>
     <string-array name="running_mode">
         <item>Walk</item>
         <item>Run</item>

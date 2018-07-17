@@ -36,8 +36,6 @@ public class RunSessionActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_run_session);
         ButterKnife.bind(this);
-        
-        checkGPSPermission();
 
         Intent intent = getIntent();
         if(intent != null && intent.hasExtra(CONFIGURATION_ID_EXTRA)) {
@@ -47,20 +45,26 @@ public class RunSessionActivity extends AppCompatActivity {
         setupListeners();
     }
 
+    @Override
+    protected void onResume() {
+        super.onResume();
+        checkGPSPermission();
+    }
+
     private void setupViewModel(long configId) {
         // Get the ViewModel from the factory
         RunSessionViewFactory factory = InjectorUtils.provideRunSessionViewModelFactory(this.getApplicationContext(), configId);
         mViewModel = ViewModelProviders.of(this, factory).get(RunSessionViewModel.class);
 
-        // Observers changes in the WeatherEntry with the id mId
+        // Observers changes
         mViewModel.getConfigurationSteps().observe(this, new Observer<List<ConfigurationStep>>() {
-                    @Override
-                    public void onChanged(@Nullable List<ConfigurationStep> configurationSteps) {
-                        if (configurationSteps != null) {
-                            updateUI(configurationSteps);
-                        }
-                    }
-                });
+            @Override
+            public void onChanged(@Nullable List<ConfigurationStep> configurationSteps) {
+                if (configurationSteps != null) {
+                    updateUI(configurationSteps);
+                }
+            }
+        });
 
     }
 
@@ -86,9 +90,19 @@ public class RunSessionActivity extends AppCompatActivity {
         LocationManager service = (LocationManager) getSystemService(LOCATION_SERVICE);
         boolean enabled = service.isProviderEnabled(LocationManager.GPS_PROVIDER);
         if (!enabled) {
-            //TODO add alert dialog to inform user first
+            showAlert();
             Intent intent = new Intent(Settings.ACTION_LOCATION_SOURCE_SETTINGS);
             startActivity(intent);
         }
+        else {
+
+        }
+    }
+
+    private void showAlert() {
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setTitle(R.string.attention);
+        builder.setMessage(R.string.gps_info_message);
+        builder.setPositiveButton(R.string.ok, null);
     }
 }
