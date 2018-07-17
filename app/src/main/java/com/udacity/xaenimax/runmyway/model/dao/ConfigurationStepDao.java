@@ -16,7 +16,7 @@ import java.util.List;
 @Dao
 public interface ConfigurationStepDao {
     @Query("SELECT * FROM configuration_step where id_configuration = :configurationId ORDER BY position")
-    LiveData<List<ConfigurationStep>> listAllConfigurationSteps(int configurationId);
+    LiveData<List<ConfigurationStep>> listAllConfigurationSteps(long configurationId);
 
     @Insert
     long insertConfiguration(ConfigurationStep configuration);

@@ -1,5 +1,6 @@
 package com.udacity.xaenimax.runmyway.ui.addconfiguration;
 
+import android.content.Intent;
 import android.os.Parcelable;
 import android.support.annotation.NonNull;
 import android.support.annotation.VisibleForTesting;
@@ -18,7 +19,10 @@ import com.udacity.xaenimax.runmyway.R;
 import com.udacity.xaenimax.runmyway.model.RunMyWayRepository;
 import com.udacity.xaenimax.runmyway.model.entity.Configuration;
 import com.udacity.xaenimax.runmyway.model.entity.ConfigurationStep;
+import com.udacity.xaenimax.runmyway.model.entity.RunSession;
+import com.udacity.xaenimax.runmyway.ui.runsession.RunSessionActivity;
 import com.udacity.xaenimax.runmyway.utils.InjectorUtils;
+import com.udacity.xaenimax.runmyway.viewmodel.AddConfigurationViewModel;
 
 import org.w3c.dom.Text;
 
@@ -31,6 +35,8 @@ import java.util.ListIterator;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+
+import static com.udacity.xaenimax.runmyway.ui.runsession.RunSessionActivity.CONFIGURATION_ID_EXTRA;
 
 public class AddConfigurationActivity extends AppCompatActivity implements SaveConfigurationDialogFragment.SaveConfigListener{
     private static final String RECYCLER_VIEW_STATE = "recycler_view_state";
@@ -61,7 +67,7 @@ public class AddConfigurationActivity extends AppCompatActivity implements SaveC
 
     private RecyclerView.LayoutManager mLayoutManager;
     private Parcelable mLayoutParcelable;
-    private Configuration mConfiguration;
+//    private Configuration mConfiguration;
     private ArrayList<ConfigurationStep> mConfigurationSteps = new ArrayList<>();
     private ConfigurationStepAdapter mConfigurationStepAdapter;
     private int totalTime = 0, totalTimeRunning = 0, totalTimeWalking = 0;
@@ -81,10 +87,11 @@ public class AddConfigurationActivity extends AppCompatActivity implements SaveC
         }
 
         configurationStepRecyclerView.setLayoutManager(mLayoutManager);
-
+        /*
         if (savedInstanceState != null && savedInstanceState.containsKey(CONFIGURATION_OBJECT)) {
             mConfiguration = savedInstanceState.getParcelable(CONFIGURATION_OBJECT);
         }
+        */
         if (savedInstanceState != null && savedInstanceState.containsKey(TOTAL_TIME)) {
             totalTime = savedInstanceState.getInt(TOTAL_TIME);
         }
@@ -150,7 +157,7 @@ public class AddConfigurationActivity extends AppCompatActivity implements SaveC
     protected void onSaveInstanceState(Bundle outState) {
         mLayoutParcelable = mLayoutManager.onSaveInstanceState();
         outState.putParcelable(RECYCLER_VIEW_STATE, mLayoutParcelable);
-        outState.putParcelable(CONFIGURATION_OBJECT, mConfiguration);
+        //outState.putParcelable(CONFIGURATION_OBJECT, mConfiguration);
         outState.putParcelableArrayList(CONFIGURATION_STEP, mConfigurationSteps);
         outState.putInt(TOTAL_TIME, totalTime);
         outState.putInt(TOTAL_TIME_RUNNING, totalTimeRunning);
@@ -166,9 +173,10 @@ public class AddConfigurationActivity extends AppCompatActivity implements SaveC
             mLayoutParcelable = savedInstanceState.getParcelable(RECYCLER_VIEW_STATE);
             mLayoutManager.onRestoreInstanceState(mLayoutParcelable);
         }
+        /*
         if (savedInstanceState != null && savedInstanceState.containsKey(CONFIGURATION_OBJECT)) {
             mConfiguration = savedInstanceState.getParcelable(CONFIGURATION_OBJECT);
-        }
+        }*/
 
         if (savedInstanceState != null && savedInstanceState.containsKey(CONFIGURATION_STEP)) {
             mConfigurationSteps = savedInstanceState.getParcelableArrayList(CONFIGURATION_STEP);
@@ -188,10 +196,10 @@ public class AddConfigurationActivity extends AppCompatActivity implements SaveC
     @Override
     public void onSaveButtonPressed(String configName) {
         final RunMyWayRepository runMyWayRepository = InjectorUtils.provideRepository(this);
-        Configuration newConfiguration = new Configuration(configName, new Date());
+        final Configuration newConfiguration = new Configuration(configName, new Date());
         runMyWayRepository.insertNewConfiguration(newConfiguration, new RunMyWayRepository.OnInsertEndedListener() {
             @Override
-            public void OnInsertEnded(long idInserted) {
+            public void OnInsertEnded(final long idInserted) {
                 for (int i = 0 ; i < mConfigurationSteps.size();  i++){
                     ConfigurationStep step = mConfigurationSteps.get(i);
                     step.configurationId = idInserted;
@@ -202,7 +210,8 @@ public class AddConfigurationActivity extends AppCompatActivity implements SaveC
                 runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
-
+                        Intent intent = new Intent(AddConfigurationActivity.this, RunSessionActivity.class);
+                        intent.putExtra(CONFIGURATION_ID_EXTRA, idInserted);
                     }
                 });
             }

@@ -7,6 +7,7 @@ import android.arch.persistence.room.PrimaryKey;
 import android.os.Parcel;
 import android.os.Parcelable;
 
+import java.util.ArrayList;
 import java.util.Date;
 
 @Entity(tableName = "configuration")
@@ -16,6 +17,9 @@ public class Configuration implements Parcelable{
     public String name;
     @ColumnInfo(name = "insert_date")
     public Date insertDate;
+
+    @Ignore
+    private ArrayList<ConfigurationStep> configurationSteps;
 
     @Ignore
     public Configuration(String name, Date insertDate){

@@ -60,7 +60,7 @@ public class RunMyWayRepository {
         return mRunSessionDao.getLastRunSession();
     }
 
-    public LiveData<List<ConfigurationStep>> getConfigurationStepsByConfigurationId(int configurationId) {
+    public LiveData<List<ConfigurationStep>> getConfigurationStepsByConfigurationId(long configurationId) {
         return mConfigurationStepDao.listAllConfigurationSteps(configurationId);
     }
 

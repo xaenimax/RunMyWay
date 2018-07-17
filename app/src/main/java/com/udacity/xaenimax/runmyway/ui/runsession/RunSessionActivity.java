@@ -16,6 +16,7 @@ import butterknife.ButterKnife;
 
 public class RunSessionActivity extends AppCompatActivity {
 
+    public static final String CONFIGURATION_ID_EXTRA = "configuration_id_extra";
     private LocationCallback mLocationCallback;
 
     @Override
@@ -25,8 +26,16 @@ public class RunSessionActivity extends AppCompatActivity {
         ButterKnife.bind(this);
         
         checkGPSPermission();
+
+        Intent intent = getIntent();
+        if(intent != null && intent.hasExtra(CONFIGURATION_ID_EXTRA)){
+            setupViewModel();
+        }
         
         setupListeners();
+    }
+
+    private void setupViewModel() {
     }
 
     private void setupListeners() {
