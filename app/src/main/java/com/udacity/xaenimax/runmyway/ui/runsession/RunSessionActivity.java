@@ -40,6 +40,13 @@ public class RunSessionActivity extends AppCompatActivity {
         Intent intent = getIntent();
         if(intent != null && intent.hasExtra(CONFIGURATION_ID_EXTRA)) {
             setupViewModel(intent.getLongExtra(CONFIGURATION_ID_EXTRA, 0));
+        } else {
+            //TODO start normal run:
+            //TODO create a gpstracker manager
+            //TODO see at link http://www.vogella.com/tutorials/AndroidLocationAPI/article.html
+            //TODO see at link https://www.journaldev.com/13373/android-google-map-drawing-route-two-points
+            //main aim is to get distance, not show it in map is it possible to get distance with location
+            // https://stackoverflow.com/questions/27730902/calculating-distance-travelled-as-the-user-moves
         }
         
         setupListeners();
