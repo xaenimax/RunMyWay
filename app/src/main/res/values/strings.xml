@@ -20,6 +20,11 @@
     <string name="confirm">CONFIRM</string>
     <string name="action_imageview">Man doing an activity</string>
     <string name="total_time_value"> %d minutes</string>
+    <string name="ask_confirmation">Save configuration?</string>
+    <string name="insert_name">Insert name here</string>
+    <string name="cancel">CANCEL</string>
+    <string name="save">Save</string>
+    <string name="run_sesssion">Start your activity!</string>
     <string-array name="running_mode">
         <item>Walk</item>
         <item>Run</item>
