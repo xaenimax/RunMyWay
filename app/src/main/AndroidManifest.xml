@@ -4,6 +4,7 @@
 
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
+    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
 
     <application
         android:allowBackup="true"
@@ -26,7 +27,7 @@
             android:name=".ui.addconfiguration.AddConfigurationActivity"
             android:label="@string/title_activity_add_configuration" />
         <activity android:name=".ui.runsession.RunSessionActivity"
-            android:label="@string/run_sesssion"></activity>
+            android:label="@string/run_sesssion"/>
     </application>
 
 </manifest>
