@@ -212,6 +212,7 @@ public class AddConfigurationActivity extends AppCompatActivity implements SaveC
                     public void run() {
                         Intent intent = new Intent(AddConfigurationActivity.this, RunSessionActivity.class);
                         intent.putExtra(CONFIGURATION_ID_EXTRA, idInserted);
+                        startActivity(intent);
                     }
                 });
             }

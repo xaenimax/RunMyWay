@@ -87,7 +87,7 @@ public class RunSessionActivity extends AppCompatActivity {
                 }
                 for (Location location : locationResult.getLocations()) {
                     // Update UI with location data
-                    // ...
+
                 }
             };
         };
