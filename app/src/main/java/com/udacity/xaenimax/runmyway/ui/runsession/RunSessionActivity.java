@@ -1,6 +1,7 @@
 package com.udacity.xaenimax.runmyway.ui.runsession;
 
 import android.Manifest;
+import android.annotation.SuppressLint;
 import android.arch.lifecycle.Observer;
 import android.arch.lifecycle.ViewModelProviders;
 import android.content.Context;
@@ -14,10 +15,12 @@ import android.location.LocationManager;
 import android.provider.Settings;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.support.design.widget.Snackbar;
 import android.support.v4.app.ActivityCompat;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.widget.ImageButton;
 
 import com.google.android.gms.location.LocationCallback;
 import com.google.android.gms.location.LocationResult;
@@ -30,6 +33,7 @@ import com.udacity.xaenimax.runmyway.viewmodel.RunSessionViewModel;
 
 import java.util.List;
 
+import butterknife.BindView;
 import butterknife.ButterKnife;
 
 public class RunSessionActivity extends AppCompatActivity implements LocationListener {
@@ -41,6 +45,10 @@ public class RunSessionActivity extends AppCompatActivity implements LocationLis
     private RunSessionViewModel mViewModel;
     private LocationManager locationManager;
     private String provider;
+
+
+    @BindView(R.id.start_stop_button)
+    public ImageButton startStopImageButton;
 
 
     @Override
@@ -66,10 +74,18 @@ public class RunSessionActivity extends AppCompatActivity implements LocationLis
     }
 
 
+    @SuppressLint("MissingPermission")
     @Override
     protected void onResume() {
         super.onResume();
-        checkGPSPermission();
+        if(checkLocationPermissions() && locationManager != null){
+            locationManager.requestLocationUpdates(provider, 400, 3, this);
+        }
+    }
+
+    private boolean checkLocationPermissions(){
+        return ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED
+                && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) == PackageManager.PERMISSION_GRANTED;
     }
 
     private void startRunning() {
@@ -79,26 +95,20 @@ public class RunSessionActivity extends AppCompatActivity implements LocationLis
         // default
         Criteria criteria = new Criteria();
         provider = locationManager.getBestProvider(criteria, false);
-        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED
-                && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
-            // TODO: Consider calling
-            ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.ACCESS_FINE_LOCATION, Manifest.permission.ACCESS_COARSE_LOCATION}, GOOGLE_LOCATION_REQUEST_CODE);
-            //    ActivityCompat#requestPermissions
-            // here to request the missing permissions, and then overriding
-            //   public void onRequestPermissionsResult(int requestCode, String[] permissions,
-            //                                          int[] grantResults)
-            // to handle the case where the user grants the permission. See the documentation
-            // for ActivityCompat#requestPermissions for more details.
+        if (!checkLocationPermissions()) {
+            ActivityCompat.requestPermissions(this,
+                    new String[]{Manifest.permission.ACCESS_FINE_LOCATION,
+                            Manifest.permission.ACCESS_COARSE_LOCATION}, GOOGLE_LOCATION_REQUEST_CODE);
             return;
         }
-        Location location = locationManager.getLastKnownLocation(provider);
+        @SuppressLint("MissingPermission") Location location = locationManager.getLastKnownLocation(provider);
 
         // Initialize the location fields
         if (location != null) {
             System.out.println("Provider " + provider + " has been selected.");
             onLocationChanged(location);
         } else {
-          //TODO location not available
+          Snackbar.make(startStopImageButton, getString(R.string.location_unavailable), Snackbar.LENGTH_SHORT).show();
         }
     }
 

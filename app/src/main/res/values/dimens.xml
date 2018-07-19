@@ -6,4 +6,5 @@
     <dimen name="normal_text_size">16sp</dimen>
     <dimen name="eight_dp">8dp</dimen>
     <dimen name="one_dp">1dp</dimen>
+    <dimen name="one_hundred_dp">100dp</dimen>
 </resources>
