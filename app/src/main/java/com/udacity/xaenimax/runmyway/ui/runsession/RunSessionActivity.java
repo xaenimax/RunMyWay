@@ -42,6 +42,9 @@ public class RunSessionActivity extends AppCompatActivity {
     private static final String LOG_TAG = RunSessionActivity.class.getSimpleName();
     public static final String CONFIGURATION_ID_EXTRA = "configuration_id_extra";
     public static final String REQUEST_LOCATION_UPDATE = "request_location update";
+    private static final String TOTAL_DISTANCE = "total_distance";
+    private static final String LAST_LONGITUDE = "last_longitude";
+    private static final String LAST_LATITUDE = "last_latitude";
     private boolean mRequestingLocationUpdates = false;
 
     private static final int GOOGLE_LOCATION_REQUEST_CODE = 6590;
@@ -51,7 +54,7 @@ public class RunSessionActivity extends AppCompatActivity {
     private FusedLocationProviderClient mFusedLocationClient;
     private LocationRequest mLocationRequest;
 
-
+    private Double totalDistance = 0d, lastLongitude = 0d, lastLatitude = 0d;
 
     private RunSessionViewModel mViewModel;
     private long mConfigId;
@@ -72,8 +75,6 @@ public class RunSessionActivity extends AppCompatActivity {
             setupViewModel(mConfigId);
         }
 
-        //main aim is to get distance, not show it in map is it possible to get distance with location
-        // https://stackoverflow.com/questions/27730902/calculating-distance-travelled-as-the-user-moves
         mFusedLocationClient = LocationServices.getFusedLocationProviderClient(this);
         updateValuesFromBundle(savedInstanceState);
         setupListeners();
@@ -88,12 +89,23 @@ public class RunSessionActivity extends AppCompatActivity {
             mRequestingLocationUpdates = savedInstanceState.getBoolean(
                     REQUEST_LOCATION_UPDATE);
         }
-
+        if (savedInstanceState.keySet().contains(TOTAL_DISTANCE)) {
+            totalDistance = savedInstanceState.getDouble(TOTAL_DISTANCE);
+        }
+        if (savedInstanceState.keySet().contains(LAST_LONGITUDE)) {
+            lastLongitude = savedInstanceState.getDouble(LAST_LONGITUDE);
+        }
+        if (savedInstanceState.keySet().contains(LAST_LATITUDE)) {
+            lastLatitude = savedInstanceState.getDouble(LAST_LATITUDE);
+        }
     }
 
     @Override
     protected void onSaveInstanceState(Bundle outState) {
         outState.putBoolean(REQUEST_LOCATION_UPDATE, mRequestingLocationUpdates);
+        outState.putDouble(TOTAL_DISTANCE, totalDistance);
+        outState.putDouble(LAST_LATITUDE, lastLatitude);
+        outState.putDouble(LAST_LONGITUDE, lastLongitude);
         super.onSaveInstanceState(outState);
     }
 
@@ -160,7 +172,25 @@ public class RunSessionActivity extends AppCompatActivity {
     }
 
 
-    //region Location Listener
+    //region Location Service
+
+    private double GetDistanceFromLatLonInKm(double lat1, double lon1, double lat2, double lon2)
+    {
+        final int R = 6371;
+        // Radius of the earth in km
+        double dLat = deg2rad(lat2 - lat1);
+        // deg2rad below
+        double dLon = deg2rad(lon2 - lon1);
+        double a = Math.sin(dLat / 2) * Math.sin(dLat / 2) + Math.cos(deg2rad(lat1)) * Math.cos(deg2rad(lat2)) * Math.sin(dLon / 2) * Math.sin(dLon / 2);
+        double c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
+        double d = R * c;
+        // Distance in km
+        return d;
+    }
+    private double deg2rad(double deg)
+    {
+        return deg * (Math.PI / 180);
+    }
 
     private void stopRequestingUpdates() {
         mFusedLocationClient.removeLocationUpdates(mLocationCallback);
@@ -231,8 +261,10 @@ public class RunSessionActivity extends AppCompatActivity {
                     return;
                 }
                 for (Location location : locationResult.getLocations()) {
-                    // Update UI with location data
-                    // ...
+                    // Update distance with location data
+                    totalDistance += GetDistanceFromLatLonInKm(lastLatitude, lastLongitude, location.getLatitude(), location.getLongitude());
+                    lastLatitude = location.getLatitude();
+                    lastLongitude = location.getLongitude();
                 }
             };
         };
