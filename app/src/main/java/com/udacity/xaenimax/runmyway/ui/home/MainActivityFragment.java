@@ -2,6 +2,7 @@ package com.udacity.xaenimax.runmyway.ui.home;
 
 import android.arch.lifecycle.Observer;
 import android.arch.lifecycle.ViewModelProviders;
+import android.content.Intent;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
@@ -10,10 +11,12 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageButton;
 import android.widget.TextView;
 
 import com.udacity.xaenimax.runmyway.R;
 import com.udacity.xaenimax.runmyway.model.entity.RunSession;
+import com.udacity.xaenimax.runmyway.ui.runsession.RunSessionActivity;
 import com.udacity.xaenimax.runmyway.viewmodel.MainViewModel;
 
 import butterknife.BindView;
@@ -32,6 +35,8 @@ public class MainActivityFragment extends Fragment {
     public TextView caloriesTextView;
     @BindView(R.id.last_session_recap_tv)
     public TextView lastSessionTextView;
+    @BindView(R.id.play_button)
+    public ImageButton playButton;
 
     public MainActivityFragment() {
     }
@@ -49,6 +54,19 @@ public class MainActivityFragment extends Fragment {
         super.onViewCreated(view, savedInstanceState);
 
         setupViewModel();
+    }
+
+    @Override
+    public void onActivityCreated(@Nullable Bundle savedInstanceState) {
+        super.onActivityCreated(savedInstanceState);
+        playButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(getActivity(), RunSessionActivity.class);
+                getActivity().startActivity(intent);
+            }
+        });
+
     }
 
     private void setupViewModel() {

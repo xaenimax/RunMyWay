@@ -13,15 +13,15 @@ import android.view.View;
 
 import com.google.android.gms.auth.api.signin.GoogleSignIn;
 import com.udacity.xaenimax.runmyway.R;
-import com.udacity.xaenimax.runmyway.network.GoogleFitService;
+import com.udacity.xaenimax.runmyway.managers.GoogleFitService;
 import com.udacity.xaenimax.runmyway.ui.addconfiguration.AddConfigurationActivity;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
-import static com.udacity.xaenimax.runmyway.network.GoogleFitService.GOOGLE_FIT_PERMISSIONS_REQUEST_CODE;
-import static com.udacity.xaenimax.runmyway.network.GoogleFitService.accessHistoryData;
-import static com.udacity.xaenimax.runmyway.network.GoogleFitService.getFitnessOptions;
+import static com.udacity.xaenimax.runmyway.managers.GoogleFitService.GOOGLE_FIT_PERMISSIONS_REQUEST_CODE;
+import static com.udacity.xaenimax.runmyway.managers.GoogleFitService.accessHistoryData;
+import static com.udacity.xaenimax.runmyway.managers.GoogleFitService.getFitnessOptions;
 
 public class MainActivity extends AppCompatActivity {
     private static final String LOG_TAG = AppCompatActivity.class.getSimpleName();
