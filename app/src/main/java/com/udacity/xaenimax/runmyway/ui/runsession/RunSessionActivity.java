@@ -7,13 +7,17 @@ import android.content.Intent;
 import android.content.IntentSender;
 import android.content.pm.PackageManager;
 import android.location.Location;
+import android.os.SystemClock;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.ActivityCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.View;
+import android.widget.Chronometer;
 import android.widget.ImageButton;
+import android.widget.TextView;
 
 import com.google.android.gms.common.api.ResolvableApiException;
 import com.google.android.gms.location.FusedLocationProviderClient;
@@ -45,22 +49,26 @@ public class RunSessionActivity extends AppCompatActivity {
     private static final String TOTAL_DISTANCE = "total_distance";
     private static final String LAST_LONGITUDE = "last_longitude";
     private static final String LAST_LATITUDE = "last_latitude";
-    private boolean mRequestingLocationUpdates = false;
+    private static final String STARTED_TIMER = "started_timer";
+    private boolean mRequestingLocationUpdates = false, mTimerStarted = true;
 
     private static final int GOOGLE_LOCATION_REQUEST_CODE = 6590;
     public static final int LOCATION_TIME_INTERVAL = 10000;
     public static final int LOCATION_FASTEST_TIME_INTERVAL = 5000;
+    
     private LocationCallback mLocationCallback;
     private FusedLocationProviderClient mFusedLocationClient;
     private LocationRequest mLocationRequest;
 
     private Double totalDistance = 0d, lastLongitude = 0d, lastLatitude = 0d;
-
+    
     private RunSessionViewModel mViewModel;
     private long mConfigId;
 
     @BindView(R.id.start_stop_button)
     public ImageButton startStopImageButton;
+    @BindView(R.id.timer_chronometer)
+    public Chronometer timerChronometer;
 
 
     @Override
@@ -98,6 +106,9 @@ public class RunSessionActivity extends AppCompatActivity {
         if (savedInstanceState.keySet().contains(LAST_LATITUDE)) {
             lastLatitude = savedInstanceState.getDouble(LAST_LATITUDE);
         }
+        if(savedInstanceState.keySet().contains(STARTED_TIMER)){
+            mTimerStarted = savedInstanceState.getBoolean(STARTED_TIMER);
+        }
     }
 
     @Override
@@ -106,6 +117,7 @@ public class RunSessionActivity extends AppCompatActivity {
         outState.putDouble(TOTAL_DISTANCE, totalDistance);
         outState.putDouble(LAST_LATITUDE, lastLatitude);
         outState.putDouble(LAST_LONGITUDE, lastLongitude);
+        outState.putBoolean(STARTED_TIMER, mTimerStarted);
         super.onSaveInstanceState(outState);
     }
 
@@ -114,6 +126,9 @@ public class RunSessionActivity extends AppCompatActivity {
         super.onPause();
         Log.d(LOG_TAG, "Stop running");
         stopRequestingUpdates();
+        if(mTimerStarted) {
+           // stopTimer();
+        }
     }
 
     @Override
@@ -123,6 +138,20 @@ public class RunSessionActivity extends AppCompatActivity {
             Log.d(LOG_TAG, "Resume running");
             startRequestingUpdates();
         }
+        if(mTimerStarted){
+            startTimer();
+        }
+    }
+
+    private void stopTimer(){
+        //mTimerStarted = false;
+        timerChronometer.stop();
+    }
+
+    private void startTimer() {
+        timerChronometer.setBase(SystemClock.elapsedRealtime());
+
+        timerChronometer.start();
     }
 
     @Override
@@ -254,6 +283,13 @@ public class RunSessionActivity extends AppCompatActivity {
     }
 
     private void setupListeners() {
+        timerChronometer.setOnChronometerTickListener(new Chronometer.OnChronometerTickListener() {
+            @Override
+            public void onChronometerTick(Chronometer chronometer) {
+                timerChronometer = chronometer;
+            }
+        });
+
         mLocationCallback = new LocationCallback() {
             @Override
             public void onLocationResult(LocationResult locationResult) {
@@ -268,6 +304,12 @@ public class RunSessionActivity extends AppCompatActivity {
                 }
             };
         };
+        startStopImageButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                
+            }
+        });
     }
 
     //endregion

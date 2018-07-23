@@ -7,4 +7,6 @@
     <dimen name="eight_dp">8dp</dimen>
     <dimen name="one_dp">1dp</dimen>
     <dimen name="one_hundred_dp">100dp</dimen>
+    <dimen name="thirtytwo_dp">32dp</dimen>
+    <dimen name="eighty_sp">80sp</dimen>
 </resources>
