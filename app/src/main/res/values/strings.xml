@@ -29,7 +29,8 @@
     <string name="gps_info_message">Please allow GPS tracking in your device settings</string>
     <string name="ok">OK</string>
     <string name="location_unavailable">Location is not available, the app won\'t track distance</string>
-    <string name="play_stop">Play/Stop</string>
+    <string name="play_stop">Play/Stop button</string>
+    <string name="play_button">Play button</string>
     <string-array name="running_mode">
         <item>Walk</item>
         <item>Run</item>
