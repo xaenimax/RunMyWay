@@ -50,7 +50,10 @@ public class RunSessionActivity extends AppCompatActivity {
     private static final String LAST_LONGITUDE = "last_longitude";
     private static final String LAST_LATITUDE = "last_latitude";
     private static final String STARTED_TIMER = "started_timer";
+    private static final String BASE_TIMER = "base_timer";
     private boolean mRequestingLocationUpdates = false, mTimerStarted = true;
+
+    private long mStartBase = SystemClock.elapsedRealtime();
 
     private static final int GOOGLE_LOCATION_REQUEST_CODE = 6590;
     public static final int LOCATION_TIME_INTERVAL = 10000;
@@ -109,6 +112,9 @@ public class RunSessionActivity extends AppCompatActivity {
         if(savedInstanceState.keySet().contains(STARTED_TIMER)){
             mTimerStarted = savedInstanceState.getBoolean(STARTED_TIMER);
         }
+        if(savedInstanceState.keySet().contains(BASE_TIMER)){
+            mStartBase = savedInstanceState.getLong(BASE_TIMER);
+        }
     }
 
     @Override
@@ -118,6 +124,7 @@ public class RunSessionActivity extends AppCompatActivity {
         outState.putDouble(LAST_LATITUDE, lastLatitude);
         outState.putDouble(LAST_LONGITUDE, lastLongitude);
         outState.putBoolean(STARTED_TIMER, mTimerStarted);
+        outState.putLong(BASE_TIMER, mStartBase);
         super.onSaveInstanceState(outState);
     }
 
@@ -149,8 +156,7 @@ public class RunSessionActivity extends AppCompatActivity {
     }
 
     private void startTimer() {
-        timerChronometer.setBase(SystemClock.elapsedRealtime());
-
+        timerChronometer.setBase(mStartBase);
         timerChronometer.start();
     }
 
@@ -187,9 +193,7 @@ public class RunSessionActivity extends AppCompatActivity {
             @Override
             public void onChanged(@Nullable List<ConfigurationStep> configurationSteps) {
                 Log.d(LOG_TAG, "Fetched data, " + configurationSteps.size() + " items found");
-                if (configurationSteps != null) {
-                    updateUI(configurationSteps);
-                }
+                updateUI(configurationSteps);
             }
         });
 
@@ -307,7 +311,13 @@ public class RunSessionActivity extends AppCompatActivity {
         startStopImageButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                
+                if(mTimerStarted){
+                    stopTimer();
+                    mTimerStarted = false;
+                } else {
+                    mTimerStarted = true;
+                    startTimer();
+                }
             }
         });
     }

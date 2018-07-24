@@ -173,11 +173,6 @@ public class AddConfigurationActivity extends AppCompatActivity implements SaveC
             mLayoutParcelable = savedInstanceState.getParcelable(RECYCLER_VIEW_STATE);
             mLayoutManager.onRestoreInstanceState(mLayoutParcelable);
         }
-        /*
-        if (savedInstanceState != null && savedInstanceState.containsKey(CONFIGURATION_OBJECT)) {
-            mConfiguration = savedInstanceState.getParcelable(CONFIGURATION_OBJECT);
-        }*/
-
         if (savedInstanceState != null && savedInstanceState.containsKey(CONFIGURATION_STEP)) {
             mConfigurationSteps = savedInstanceState.getParcelableArrayList(CONFIGURATION_STEP);
         }
