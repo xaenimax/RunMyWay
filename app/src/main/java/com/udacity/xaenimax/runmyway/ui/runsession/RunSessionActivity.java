@@ -174,7 +174,7 @@ public class RunSessionActivity extends AppCompatActivity {
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);
-        if(requestCode == GOOGLE_LOCATION_REQUEST_CODE && grantResults[0] == RESULT_OK && grantResults[1] == RESULT_OK){
+        if(requestCode == GOOGLE_LOCATION_REQUEST_CODE && grantResults[0] == PackageManager.PERMISSION_GRANTED && grantResults[1] == PackageManager.PERMISSION_GRANTED){
             Log.d(LOG_TAG, "Location permissions granted");
             startRequestingUpdates();
         }
