@@ -51,9 +51,15 @@ public class RunSessionActivity extends AppCompatActivity {
     private static final String LAST_LATITUDE = "last_latitude";
     private static final String STARTED_TIMER = "started_timer";
     private static final String BASE_TIMER = "base_timer";
+    private static final String TOTAL_TIME = "total_time";
+
     private boolean mRequestingLocationUpdates = false, mTimerStarted = true;
 
+    private List<ConfigurationStep> mConfigurationSteps;
+
     private long mStartBase = SystemClock.elapsedRealtime();
+    private long mTotalTime;
+
 
     private static final int GOOGLE_LOCATION_REQUEST_CODE = 6590;
     public static final int LOCATION_TIME_INTERVAL = 10000;
@@ -72,6 +78,8 @@ public class RunSessionActivity extends AppCompatActivity {
     public ImageButton startStopImageButton;
     @BindView(R.id.timer_chronometer)
     public Chronometer timerChronometer;
+    @BindView(R.id.current_step_tv)
+    public TextView currentRunStep;
 
 
     @Override
@@ -115,6 +123,9 @@ public class RunSessionActivity extends AppCompatActivity {
         if(savedInstanceState.keySet().contains(BASE_TIMER)){
             mStartBase = savedInstanceState.getLong(BASE_TIMER);
         }
+        if(savedInstanceState.keySet().contains(TOTAL_TIME)){
+            mTotalTime = savedInstanceState.getLong(TOTAL_TIME);
+        }
     }
 
     @Override
@@ -125,17 +136,15 @@ public class RunSessionActivity extends AppCompatActivity {
         outState.putDouble(LAST_LONGITUDE, lastLongitude);
         outState.putBoolean(STARTED_TIMER, mTimerStarted);
         outState.putLong(BASE_TIMER, mStartBase);
+        outState.putLong(TOTAL_TIME, mTotalTime);
         super.onSaveInstanceState(outState);
     }
 
     @Override
     protected void onPause() {
         super.onPause();
-        Log.d(LOG_TAG, "Stop running");
+        Log.d(LOG_TAG, "Stop location updates " + mConfigurationSteps.size());
         stopRequestingUpdates();
-        if(mTimerStarted) {
-           // stopTimer();
-        }
     }
 
     @Override
@@ -151,7 +160,6 @@ public class RunSessionActivity extends AppCompatActivity {
     }
 
     private void stopTimer(){
-        //mTimerStarted = false;
         timerChronometer.stop();
     }
 
@@ -179,7 +187,8 @@ public class RunSessionActivity extends AppCompatActivity {
             startRequestingUpdates();
         }
         else {
-            Log.d(LOG_TAG, "Permissions denied");
+            Log.d(LOG_TAG, "Location Permissions denied");
+            mRequestingLocationUpdates = false;
         }
     }
 
@@ -193,15 +202,25 @@ public class RunSessionActivity extends AppCompatActivity {
             @Override
             public void onChanged(@Nullable List<ConfigurationStep> configurationSteps) {
                 Log.d(LOG_TAG, "Fetched data, " + configurationSteps.size() + " items found");
-                updateUI(configurationSteps);
+                updateUIAndSetData(configurationSteps);
+
             }
         });
 
     }
 
-    private void updateUI(List<ConfigurationStep> configurationSteps) {
 
+    private void updateUIAndSetData(List<ConfigurationStep> configurationSteps) {
+        if(configurationSteps.size() > 0) {
+            currentRunStep.setText(configurationSteps.get(0).stepType);
 
+            mConfigurationSteps = configurationSteps;
+            for (ConfigurationStep step : configurationSteps) {
+                mTotalTime += step.duration * 1000 * 60;
+            }
+        }else {
+            currentRunStep.setText(R.string.run);
+        }
     }
 
 
@@ -291,6 +310,33 @@ public class RunSessionActivity extends AppCompatActivity {
             @Override
             public void onChronometerTick(Chronometer chronometer) {
                 timerChronometer = chronometer;
+                if(mConfigurationSteps != null && mConfigurationSteps.size() > 0){
+                    long elapsedMillis = SystemClock.elapsedRealtime() - timerChronometer.getBase();
+                    //if time finished we leave activity
+                    if(elapsedMillis >= mTotalTime){
+                        goToCompletedSession();
+
+                    }else {
+                        //else we check wich runstep we're doing
+                        long currentMinute = (long) (elapsedMillis/(1000*60.0));
+                        Log.d(LOG_TAG, "Elapsed time in minutes " + currentMinute);
+                        long totalMinute = 0;
+                        int index = -1;
+                        while(totalMinute <= currentMinute && index < mConfigurationSteps.size() - 1){
+                            index++;
+                            totalMinute +=  mConfigurationSteps.get(index).duration;
+                        }
+
+                        final ConfigurationStep step = mConfigurationSteps.get(index);
+                        Log.d(LOG_TAG, "Current step " + index + " " + step.stepType + " " + step.duration);
+                        runOnUiThread(new Runnable() {
+                            @Override
+                            public void run() {
+                                currentRunStep.setText(step.stepType);
+                            }
+                        });
+                    }
+                }
             }
         });
 
@@ -320,6 +366,17 @@ public class RunSessionActivity extends AppCompatActivity {
                 }
             }
         });
+
+        startStopImageButton.setOnLongClickListener(new View.OnLongClickListener() {
+            @Override
+            public boolean onLongClick(View view) {
+                return false;
+            }
+        });
+    }
+
+    private void goToCompletedSession() {
+        //TODO navigate to CompletedSessionActivity
     }
 
     //endregion

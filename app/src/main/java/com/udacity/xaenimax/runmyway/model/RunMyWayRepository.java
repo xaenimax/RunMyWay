@@ -82,9 +82,12 @@ public class RunMyWayRepository {
             @Override
             public void run() {
                 mConfigurationStepDao.insertAll(newConfigurationSteps);
-
             }
         });
+    }
+
+    public LiveData<List<Configuration>> getConfigurations() {
+        return mConfigurationDao.listAllConfigurations();
     }
 
     public interface OnInsertEndedListener{

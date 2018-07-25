@@ -9,12 +9,16 @@ import android.support.design.widget.Snackbar;
 import android.support.v4.app.FragmentManager;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 
 import com.google.android.gms.auth.api.signin.GoogleSignIn;
 import com.udacity.xaenimax.runmyway.R;
 import com.udacity.xaenimax.runmyway.managers.GoogleFitService;
 import com.udacity.xaenimax.runmyway.ui.addconfiguration.AddConfigurationActivity;
+import com.udacity.xaenimax.runmyway.ui.configurationlist.ConfigurationListActivity;
+import com.udacity.xaenimax.runmyway.viewmodel.MainViewModel;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -51,6 +55,13 @@ public class MainActivity extends AppCompatActivity {
 
         setUpListeners();
     }
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        // Inflate the menu; this adds items to the action bar if it is present.
+        getMenuInflater().inflate(R.menu.menu_main, menu);
+        return true;
+    }
+
 
     private void setUpListeners() {
         //Setup the GoogleFitService Listener, once it retrieve data from Fitness api
@@ -102,6 +113,28 @@ public class MainActivity extends AppCompatActivity {
         super.onResume();
         checkPermission();
     }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case R.id.action_configuration_list:
+                goToActivity(ConfigurationListActivity.class);
+                return true;
+            case R.id.action_news:
+                //TODO go to news
+                return true;
+            default:
+                // If we got here, the user's action was not recognized.
+                // Invoke the superclass to handle it.
+                return super.onOptionsItemSelected(item);
+        }
+    }
+
+    private void goToActivity(Class activityClass) {
+        Intent intent = new Intent(MainActivity.this, activityClass);
+        this.startActivity(intent);
+    }
+
 
     public void checkPermission(){
         if(!GoogleSignIn.hasPermissions(GoogleSignIn.getLastSignedInAccount(this), getFitnessOptions())) {

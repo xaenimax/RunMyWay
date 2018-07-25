@@ -1,7 +1,8 @@
 <resources>
     <string name="app_name">Run My Way</string>
     <string name="title_activity_main">Run My Way</string>
-    <string name="action_settings">Settings</string>
+    <string name="action_configuration_list">Configuration List</string>
+    <string name="action_news">News</string>
     <string name="google_account_alert">You need to sign-in with your Google account to save your data</string>
     <string name="welcome_string">Hello!</string>
     <string name="look_at_activies">Look at your daily activities</string>
@@ -31,6 +32,8 @@
     <string name="location_unavailable">Location is not available, the app won\'t track distance</string>
     <string name="play_stop">Play/Stop button</string>
     <string name="play_button">Play button</string>
+    <string name="run">Run</string>
+    <string name="saved_configuration">Your saved configuration list</string>
     <string-array name="running_mode">
         <item>Walk</item>
         <item>Run</item>
