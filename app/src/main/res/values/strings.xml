@@ -11,15 +11,15 @@
     <string name="distance">Distance: %.2f Km</string>
     <string name="google_fit_failed">Failed to load Fitness data</string>
     <string name="last_session">Last Session:</string>
-    <string name="no_run_session">You don\'t have any sessions yet</string>
+    <string name="no_run_session">You don\'t have any sessions yet.</string>
     <string name="title_activity_add_configuration">New running setup</string>
-    <string name="total_minutes">Total time:</string>
-    <string name="total_walking">Total time walking:</string>
-    <string name="total_running">Total time running</string>
+    <string name="total_minutes">Total time: </string>
+    <string name="total_walking">Total time walking: </string>
+    <string name="total_running">Total time running: </string>
     <string name="add">Add</string>
     <string name="minutes">Minutes</string>
     <string name="confirm">CONFIRM</string>
-    <string name="action_imageview">Man doing an activity</string>
+    <string name="action_imageview">Runnig man</string>
     <string name="total_time_value"> %d minutes</string>
     <string name="ask_confirmation">Save configuration?</string>
     <string name="insert_name">Insert name here</string>
@@ -33,12 +33,15 @@
     <string name="play_stop">Play/Stop button</string>
     <string name="play_button">Play button</string>
     <string name="run">Run</string>
-    <string name="saved_configuration">Your saved configuration list</string>
+    <string name="saved_configuration">Your saved configuration list:</string>
     <string name="configuration_item">Configuration item</string>
-    <string name="fitness_news">Latest fitness news from NYT</string>
+    <string name="fitness_news">Latest fitness news from NYT:</string>
     <string name="news">News</string>
     <string name="connection_error">Error retrieving data. Check your Internet connection</string>
     <string name="no_snippet">No snippet available</string>
+    <string name="no_title">No title</string>
+    <string name="distance_no_data">No distance retrieved yet.</string>
+    <string name="calories_no_data">No calories data retrieved yet.</string>
     <string-array name="running_mode">
         <item>Walk</item>
         <item>Run</item>

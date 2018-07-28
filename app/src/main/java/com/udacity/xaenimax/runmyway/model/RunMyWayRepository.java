@@ -86,6 +86,15 @@ public class RunMyWayRepository {
         });
     }
 
+    public void insertNewRunSession(final RunSession session){
+        mExecutors.diskIO().execute(new Runnable() {
+            @Override
+            public void run() {
+                mRunSessionDao.insertNewRunSession(session);
+            }
+        });
+    }
+
     public LiveData<List<Configuration>> getConfigurations() {
         return mConfigurationDao.listAllConfigurations();
     }

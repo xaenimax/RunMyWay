@@ -9,10 +9,9 @@
         android:id="@+id/configuration_title_tv"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginStart="@dimen/eight_dp"
-        android:layout_marginEnd="@dimen/eight_dp"
         android:gravity="center_vertical"
         android:textStyle="bold"
-        android:drawableStart="@mipmap/running_couple_no_elevation"
+        android:textSize="@dimen/bigger_text_size"
+        android:drawableStart="@drawable/running_couple_no_elevation"
         android:contentDescription="@string/configuration_item"/>
 </LinearLayout>

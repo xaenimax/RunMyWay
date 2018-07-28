@@ -32,11 +32,14 @@ import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.udacity.xaenimax.runmyway.R;
+import com.udacity.xaenimax.runmyway.model.RunMyWayRepository;
 import com.udacity.xaenimax.runmyway.model.entity.ConfigurationStep;
+import com.udacity.xaenimax.runmyway.model.entity.RunSession;
 import com.udacity.xaenimax.runmyway.utils.InjectorUtils;
 import com.udacity.xaenimax.runmyway.viewmodel.RunSessionViewFactory;
 import com.udacity.xaenimax.runmyway.viewmodel.RunSessionViewModel;
 
+import java.util.Date;
 import java.util.List;
 
 import butterknife.BindView;
@@ -57,7 +60,7 @@ public class RunSessionActivity extends AppCompatActivity {
 
     private List<ConfigurationStep> mConfigurationSteps;
 
-    private long mStartBase = SystemClock.elapsedRealtime();
+    private long mStartBase = 0;
     private long mTotalTime;
 
 
@@ -160,11 +163,12 @@ public class RunSessionActivity extends AppCompatActivity {
     }
 
     private void stopTimer(){
+        mStartBase = timerChronometer.getBase() - SystemClock.elapsedRealtime();
         timerChronometer.stop();
     }
 
     private void startTimer() {
-        timerChronometer.setBase(mStartBase);
+        timerChronometer.setBase(SystemClock.elapsedRealtime() + mStartBase);
         timerChronometer.start();
     }
 
@@ -370,9 +374,23 @@ public class RunSessionActivity extends AppCompatActivity {
         startStopImageButton.setOnLongClickListener(new View.OnLongClickListener() {
             @Override
             public boolean onLongClick(View view) {
+                saveCurrentSession();
+                //TODO finire qui
                 return false;
             }
         });
+    }
+
+    private void saveCurrentSession() {
+        int calories = calculateCalories();
+        RunSession currentSession = new RunSession(mTotalTime, totalDistance, calories, new Date());
+        RunMyWayRepository repository =  InjectorUtils.provideRepository(this);
+        repository.insertNewRunSession(currentSession);
+    }
+
+    private int calculateCalories() {
+        double calories = 6 * mTotalTime;
+        return (int)calories;
     }
 
     private void goToCompletedSession() {

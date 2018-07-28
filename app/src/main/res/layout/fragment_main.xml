@@ -34,6 +34,7 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="@dimen/sixteen_dp"
         android:textSize="@dimen/normal_text_size"
+        android:text="@string/distance_no_data"
         app:layout_constraintStart_toStartOf="@id/welcome_tv"
         app:layout_constraintTop_toBottomOf="@id/today_achievement_tv"
         />
@@ -41,6 +42,7 @@
         android:id="@+id/today_achievement_calory_tv"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:text="@string/calories_no_data"
         android:layout_marginTop="@dimen/sixteen_dp"
         android:textSize="@dimen/normal_text_size"
         app:layout_constraintStart_toStartOf="@id/welcome_tv"
