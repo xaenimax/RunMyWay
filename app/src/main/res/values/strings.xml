@@ -34,6 +34,11 @@
     <string name="play_button">Play button</string>
     <string name="run">Run</string>
     <string name="saved_configuration">Your saved configuration list</string>
+    <string name="configuration_item">Configuration item</string>
+    <string name="fitness_news">Latest fitness news from NYT</string>
+    <string name="news">News</string>
+    <string name="connection_error">Error retrieving data. Check your Internet connection</string>
+    <string name="no_snippet">No snippet available</string>
     <string-array name="running_mode">
         <item>Walk</item>
         <item>Run</item>

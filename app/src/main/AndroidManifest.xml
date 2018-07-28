@@ -29,7 +29,8 @@
         <activity
             android:name=".ui.runsession.RunSessionActivity"
             android:label="@string/run_sesssion" />
-        <activity android:name=".ui.configurationlist.ConfigurationListActivity"></activity>
+        <activity android:name=".ui.configurationlist.ConfigurationListActivity" />
+        <activity android:name=".ui.news.NewsActivity"></activity>
     </application>
 
 </manifest>

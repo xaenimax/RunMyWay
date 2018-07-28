@@ -5,16 +5,14 @@
     android:layout_height="wrap_content"
     android:orientation="horizontal"
     android:layout_margin="@dimen/eight_dp">
-    <ImageView
-        android:layout_width="wrap_content"
-        android:layout_height="@dimen/one_hundred_dp"
-        android:src="@mipmap/running_couple_no_elevation"
-        android:adjustViewBounds="true"
-        />
     <TextView
         android:id="@+id/configuration_title_tv"
-        android:layout_width="wrap_content"
-        android:layout_height="match_parent"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
         android:layout_marginStart="@dimen/eight_dp"
-        android:layout_gravity="center"/>
+        android:layout_marginEnd="@dimen/eight_dp"
+        android:gravity="center_vertical"
+        android:textStyle="bold"
+        android:drawableStart="@mipmap/running_couple_no_elevation"
+        android:contentDescription="@string/configuration_item"/>
 </LinearLayout>

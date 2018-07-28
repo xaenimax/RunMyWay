@@ -18,6 +18,7 @@ import com.udacity.xaenimax.runmyway.R;
 import com.udacity.xaenimax.runmyway.managers.GoogleFitService;
 import com.udacity.xaenimax.runmyway.ui.addconfiguration.AddConfigurationActivity;
 import com.udacity.xaenimax.runmyway.ui.configurationlist.ConfigurationListActivity;
+import com.udacity.xaenimax.runmyway.ui.news.NewsActivity;
 import com.udacity.xaenimax.runmyway.viewmodel.MainViewModel;
 
 import butterknife.BindView;
@@ -121,7 +122,7 @@ public class MainActivity extends AppCompatActivity {
                 goToActivity(ConfigurationListActivity.class);
                 return true;
             case R.id.action_news:
-                //TODO go to news
+                goToActivity(NewsActivity.class);
                 return true;
             default:
                 // If we got here, the user's action was not recognized.

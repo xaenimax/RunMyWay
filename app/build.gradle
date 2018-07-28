@@ -9,6 +9,7 @@ android {
         versionCode 1
         versionName "1.0"
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
+        buildConfigField "String", "API_KEY", NYT_API_KEY
     }
     buildTypes {
         release {
@@ -17,6 +18,7 @@ android {
         }
     }
 }
+
 
 dependencies {
     def build_version = "27.1.1"
@@ -53,4 +55,6 @@ dependencies {
     //Butterknife
     implementation 'com.jakewharton:butterknife:8.8.1'
     annotationProcessor 'com.jakewharton:butterknife-compiler:8.8.1'
+    //gson
+    implementation 'com.google.code.gson:gson:2.8.5'
 }
