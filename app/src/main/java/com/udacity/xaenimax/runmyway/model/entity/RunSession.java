@@ -17,7 +17,7 @@ public class RunSession {
     @ColumnInfo(name = "session_date")
     public Date sessionDate;
 
-    public RunSession(int id, long duration, double distance, int calories, Date sessionDate){
+    public RunSession(int id, long duration, double distance, int calories, Date sessionDate) {
         this.id = id;
         this.duration = duration;
         this.distance = distance;
@@ -26,7 +26,7 @@ public class RunSession {
     }
 
     @Ignore
-    public RunSession(long duration, double distance, int calories, Date sessionDate){
+    public RunSession(long duration, double distance, int calories, Date sessionDate) {
         this.id = id;
         this.duration = duration;
         this.distance = distance;

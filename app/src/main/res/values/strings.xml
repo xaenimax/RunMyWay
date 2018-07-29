@@ -42,6 +42,11 @@
     <string name="no_title">No title</string>
     <string name="distance_no_data">No distance retrieved yet.</string>
     <string name="calories_no_data">No calories data retrieved yet.</string>
+    <string name="subscribe_error">The app couldn\'t register %s data on Google Fit.</string>
+    <string name="unsubscribe_error">The app couldn\'t unregister %s data on Google Fit.</string>
+
+    <string name="activity">Activity</string>
+    <string name="completed_session">Completed Session</string>
     <string-array name="running_mode">
         <item>Walk</item>
         <item>Run</item>

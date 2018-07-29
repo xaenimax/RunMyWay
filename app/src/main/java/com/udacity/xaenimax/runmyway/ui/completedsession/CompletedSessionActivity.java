@@ -3,6 +3,8 @@ package com.udacity.xaenimax.runmyway.ui.completedsession;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 
+import com.udacity.xaenimax.runmyway.R;
+
 public class CompletedSessionActivity extends AppCompatActivity {
 
     @Override

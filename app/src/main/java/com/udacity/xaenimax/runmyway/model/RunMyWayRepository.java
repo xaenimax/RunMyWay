@@ -26,9 +26,9 @@ public class RunMyWayRepository {
     private final AppExecutor mExecutors;
 
     private RunMyWayRepository(ConfigurationDao configurationDao,
-                              RunSessionDao runSessionDao,
-                              AppExecutor appExecutor,
-                              ConfigurationStepDao configurationStepDao) {
+                               RunSessionDao runSessionDao,
+                               AppExecutor appExecutor,
+                               ConfigurationStepDao configurationStepDao) {
         this.mConfigurationDao = configurationDao;
         this.mRunSessionDao = runSessionDao;
         this.mConfigurationStepDao = configurationStepDao;
@@ -64,12 +64,12 @@ public class RunMyWayRepository {
         return mConfigurationStepDao.listAllConfigurationSteps(configurationId);
     }
 
-    public void insertNewConfiguration(final Configuration newConfiguration, final OnInsertEndedListener listener){
+    public void insertNewConfiguration(final Configuration newConfiguration, final OnInsertEndedListener listener) {
         mExecutors.diskIO().execute(new Runnable() {
             @Override
             public void run() {
-                long id =  mConfigurationDao.insertConfiguration(newConfiguration);
-                if(listener != null){
+                long id = mConfigurationDao.insertConfiguration(newConfiguration);
+                if (listener != null) {
                     listener.OnInsertEnded(id);
                 }
             }
@@ -77,7 +77,7 @@ public class RunMyWayRepository {
 
     }
 
-    public void insertNewConfigurationStep(final List<ConfigurationStep> newConfigurationSteps){
+    public void insertNewConfigurationStep(final List<ConfigurationStep> newConfigurationSteps) {
         mExecutors.diskIO().execute(new Runnable() {
             @Override
             public void run() {
@@ -86,7 +86,7 @@ public class RunMyWayRepository {
         });
     }
 
-    public void insertNewRunSession(final RunSession session){
+    public void insertNewRunSession(final RunSession session) {
         mExecutors.diskIO().execute(new Runnable() {
             @Override
             public void run() {
@@ -99,21 +99,21 @@ public class RunMyWayRepository {
         return mConfigurationDao.listAllConfigurations();
     }
 
-    public interface OnInsertEndedListener{
+    public interface OnInsertEndedListener {
         void OnInsertEnded(long idInserted);
     }
 /**
-    public void insertNewConfiguration(Configuration configuration){
-        return mConfigurationDao.insertConfiguration(configu);
-    }
+ public void insertNewConfiguration(Configuration configuration){
+ return mConfigurationDao.insertConfiguration(configu);
+ }
 
 
-     * Deletes old weather data because we don't need to keep multiple days' data
+ * Deletes old weather data because we don't need to keep multiple days' data
 
-    private void deleteOldData() {
-        Date today = SunshineDateUtils.getNormalizedUtcDateForToday();
-        mWeatherDao.deleteOldWeather(today);
-    }
-     */
+ private void deleteOldData() {
+ Date today = SunshineDateUtils.getNormalizedUtcDateForToday();
+ mWeatherDao.deleteOldWeather(today);
+ }
+ */
 
 }

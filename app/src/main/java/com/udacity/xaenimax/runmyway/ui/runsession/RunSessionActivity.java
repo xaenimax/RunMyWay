@@ -10,6 +10,7 @@ import android.location.Location;
 import android.os.SystemClock;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.support.design.widget.Snackbar;
 import android.support.v4.app.ActivityCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -19,7 +20,11 @@ import android.widget.Chronometer;
 import android.widget.ImageButton;
 import android.widget.TextView;
 
+import com.google.android.gms.auth.api.signin.GoogleSignIn;
+import com.google.android.gms.common.api.GoogleApi;
 import com.google.android.gms.common.api.ResolvableApiException;
+import com.google.android.gms.fitness.Fitness;
+import com.google.android.gms.fitness.data.DataType;
 import com.google.android.gms.location.FusedLocationProviderClient;
 import com.google.android.gms.location.LocationCallback;
 import com.google.android.gms.location.LocationRequest;
@@ -32,9 +37,11 @@ import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.udacity.xaenimax.runmyway.R;
+import com.udacity.xaenimax.runmyway.managers.GoogleFitService;
 import com.udacity.xaenimax.runmyway.model.RunMyWayRepository;
 import com.udacity.xaenimax.runmyway.model.entity.ConfigurationStep;
 import com.udacity.xaenimax.runmyway.model.entity.RunSession;
+import com.udacity.xaenimax.runmyway.ui.completedsession.CompletedSessionActivity;
 import com.udacity.xaenimax.runmyway.utils.InjectorUtils;
 import com.udacity.xaenimax.runmyway.viewmodel.RunSessionViewFactory;
 import com.udacity.xaenimax.runmyway.viewmodel.RunSessionViewModel;
@@ -55,6 +62,10 @@ public class RunSessionActivity extends AppCompatActivity {
     private static final String STARTED_TIMER = "started_timer";
     private static final String BASE_TIMER = "base_timer";
     private static final String TOTAL_TIME = "total_time";
+    public static final double ONE_MINUTE_IN_MILLIS = 1000 * 60.0;
+    public static final int AVG_CALORIES_BURNED_PER_MINUTE = 6;
+
+    private GoogleFitService.GoogleFitListener mListener;
 
     private boolean mRequestingLocationUpdates = false, mTimerStarted = true;
 
@@ -67,13 +78,13 @@ public class RunSessionActivity extends AppCompatActivity {
     private static final int GOOGLE_LOCATION_REQUEST_CODE = 6590;
     public static final int LOCATION_TIME_INTERVAL = 10000;
     public static final int LOCATION_FASTEST_TIME_INTERVAL = 5000;
-    
+
     private LocationCallback mLocationCallback;
     private FusedLocationProviderClient mFusedLocationClient;
     private LocationRequest mLocationRequest;
 
     private Double totalDistance = 0d, lastLongitude = 0d, lastLatitude = 0d;
-    
+
     private RunSessionViewModel mViewModel;
     private long mConfigId;
 
@@ -120,13 +131,13 @@ public class RunSessionActivity extends AppCompatActivity {
         if (savedInstanceState.keySet().contains(LAST_LATITUDE)) {
             lastLatitude = savedInstanceState.getDouble(LAST_LATITUDE);
         }
-        if(savedInstanceState.keySet().contains(STARTED_TIMER)){
+        if (savedInstanceState.keySet().contains(STARTED_TIMER)) {
             mTimerStarted = savedInstanceState.getBoolean(STARTED_TIMER);
         }
-        if(savedInstanceState.keySet().contains(BASE_TIMER)){
+        if (savedInstanceState.keySet().contains(BASE_TIMER)) {
             mStartBase = savedInstanceState.getLong(BASE_TIMER);
         }
-        if(savedInstanceState.keySet().contains(TOTAL_TIME)){
+        if (savedInstanceState.keySet().contains(TOTAL_TIME)) {
             mTotalTime = savedInstanceState.getLong(TOTAL_TIME);
         }
     }
@@ -146,7 +157,10 @@ public class RunSessionActivity extends AppCompatActivity {
     @Override
     protected void onPause() {
         super.onPause();
-        Log.d(LOG_TAG, "Stop location updates " + mConfigurationSteps.size());
+        Log.d(LOG_TAG, "Stop location updates");
+        if(mTimerStarted){
+            stopTimer();
+        }
         stopRequestingUpdates();
     }
 
@@ -157,28 +171,31 @@ public class RunSessionActivity extends AppCompatActivity {
             Log.d(LOG_TAG, "Resume running");
             startRequestingUpdates();
         }
-        if(mTimerStarted){
+        if (mTimerStarted) {
             startTimer();
         }
     }
 
-    private void stopTimer(){
+    private void stopTimer() {
         mStartBase = timerChronometer.getBase() - SystemClock.elapsedRealtime();
         timerChronometer.stop();
+        GoogleFitService.unregisterGoogleFitnessData(this, mListener);
     }
 
     private void startTimer() {
         timerChronometer.setBase(SystemClock.elapsedRealtime() + mStartBase);
         timerChronometer.start();
+        //it also starts fitness recording if possibile
+        GoogleFitService.registerGoogleFitnessData(this, mListener);
     }
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        if(requestCode == GOOGLE_LOCATION_REQUEST_CODE && resultCode != RESULT_OK){
+        if (requestCode == GOOGLE_LOCATION_REQUEST_CODE && resultCode != RESULT_OK) {
             Log.d(LOG_TAG, "Couldn't ask for location services");
             mRequestingLocationUpdates = false;
-        }else {
+        } else {
             startRequestingUpdates();
         }
     }
@@ -186,11 +203,10 @@ public class RunSessionActivity extends AppCompatActivity {
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);
-        if(requestCode == GOOGLE_LOCATION_REQUEST_CODE && grantResults[0] == PackageManager.PERMISSION_GRANTED && grantResults[1] == PackageManager.PERMISSION_GRANTED){
+        if (requestCode == GOOGLE_LOCATION_REQUEST_CODE && grantResults[0] == PackageManager.PERMISSION_GRANTED && grantResults[1] == PackageManager.PERMISSION_GRANTED) {
             Log.d(LOG_TAG, "Location permissions granted");
             startRequestingUpdates();
-        }
-        else {
+        } else {
             Log.d(LOG_TAG, "Location Permissions denied");
             mRequestingLocationUpdates = false;
         }
@@ -215,14 +231,14 @@ public class RunSessionActivity extends AppCompatActivity {
 
 
     private void updateUIAndSetData(List<ConfigurationStep> configurationSteps) {
-        if(configurationSteps.size() > 0) {
+        if (configurationSteps.size() > 0) {
             currentRunStep.setText(configurationSteps.get(0).stepType);
 
             mConfigurationSteps = configurationSteps;
             for (ConfigurationStep step : configurationSteps) {
                 mTotalTime += step.duration * 1000 * 60;
             }
-        }else {
+        } else {
             currentRunStep.setText(R.string.run);
         }
     }
@@ -230,8 +246,7 @@ public class RunSessionActivity extends AppCompatActivity {
 
     //region Location Service
 
-    private double GetDistanceFromLatLonInKm(double lat1, double lon1, double lat2, double lon2)
-    {
+    private double GetDistanceFromLatLonInKm(double lat1, double lon1, double lat2, double lon2) {
         final int R = 6371;
         // Radius of the earth in km
         double dLat = deg2rad(lat2 - lat1);
@@ -243,8 +258,8 @@ public class RunSessionActivity extends AppCompatActivity {
         // Distance in km
         return d;
     }
-    private double deg2rad(double deg)
-    {
+
+    private double deg2rad(double deg) {
         return deg * (Math.PI / 180);
     }
 
@@ -310,25 +325,41 @@ public class RunSessionActivity extends AppCompatActivity {
     }
 
     private void setupListeners() {
+        mListener = new GoogleFitService.GoogleFitListener() {
+            @Override
+            public void onDailyActivitiesListener(float distance, long Kcal) {
+                //nothing to do
+            }
+
+            @Override
+            public void onFailureListener(final String errorMessage) {
+                runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        Snackbar.make(startStopImageButton, errorMessage, Snackbar.LENGTH_SHORT).show();
+                    }
+                });
+            }
+        };
         timerChronometer.setOnChronometerTickListener(new Chronometer.OnChronometerTickListener() {
             @Override
             public void onChronometerTick(Chronometer chronometer) {
                 timerChronometer = chronometer;
-                if(mConfigurationSteps != null && mConfigurationSteps.size() > 0){
+                if (mConfigurationSteps != null && mConfigurationSteps.size() > 0) {
                     long elapsedMillis = SystemClock.elapsedRealtime() - timerChronometer.getBase();
                     //if time finished we leave activity
-                    if(elapsedMillis >= mTotalTime){
-                        goToCompletedSession();
+                    if (elapsedMillis >= mTotalTime) {
+                        stopRegisteringSession();
 
-                    }else {
+                    } else {
                         //else we check wich runstep we're doing
-                        long currentMinute = (long) (elapsedMillis/(1000*60.0));
+                        long currentMinute = (long) (elapsedMillis / ONE_MINUTE_IN_MILLIS);
                         Log.d(LOG_TAG, "Elapsed time in minutes " + currentMinute);
                         long totalMinute = 0;
                         int index = -1;
-                        while(totalMinute <= currentMinute && index < mConfigurationSteps.size() - 1){
+                        while (totalMinute <= currentMinute && index < mConfigurationSteps.size() - 1) {
                             index++;
-                            totalMinute +=  mConfigurationSteps.get(index).duration;
+                            totalMinute += mConfigurationSteps.get(index).duration;
                         }
 
                         final ConfigurationStep step = mConfigurationSteps.get(index);
@@ -356,12 +387,14 @@ public class RunSessionActivity extends AppCompatActivity {
                     lastLatitude = location.getLatitude();
                     lastLongitude = location.getLongitude();
                 }
-            };
+            }
+
+            ;
         };
         startStopImageButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if(mTimerStarted){
+                if (mTimerStarted) {
                     stopTimer();
                     mTimerStarted = false;
                 } else {
@@ -374,27 +407,35 @@ public class RunSessionActivity extends AppCompatActivity {
         startStopImageButton.setOnLongClickListener(new View.OnLongClickListener() {
             @Override
             public boolean onLongClick(View view) {
-                saveCurrentSession();
-                //TODO finire qui
+                stopRegisteringSession();
                 return false;
             }
         });
     }
 
+    private void stopRegisteringSession() {
+        stopRequestingUpdates();
+        stopTimer();
+        saveCurrentSession();
+        goToCompletedSession();
+    }
+
     private void saveCurrentSession() {
         int calories = calculateCalories();
         RunSession currentSession = new RunSession(mTotalTime, totalDistance, calories, new Date());
-        RunMyWayRepository repository =  InjectorUtils.provideRepository(this);
+        RunMyWayRepository repository = InjectorUtils.provideRepository(this);
         repository.insertNewRunSession(currentSession);
     }
 
     private int calculateCalories() {
-        double calories = 6 * mTotalTime;
-        return (int)calories;
+        //at the moment it is just a rough calories calculus
+        double calories = AVG_CALORIES_BURNED_PER_MINUTE * mTotalTime / ONE_MINUTE_IN_MILLIS;
+        return (int) calories;
     }
 
     private void goToCompletedSession() {
-        //TODO navigate to CompletedSessionActivity
+        Intent intent = new Intent(RunSessionActivity.this, CompletedSessionActivity.class);
+        startActivity(intent);
     }
 
     //endregion

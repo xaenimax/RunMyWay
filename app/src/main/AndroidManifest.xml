@@ -28,9 +28,12 @@
             android:label="@string/title_activity_add_configuration" />
         <activity
             android:name=".ui.runsession.RunSessionActivity"
-            android:label="@string/run_sesssion" />
+            android:label="@string/run_sesssion"
+            android:noHistory="true"/>
         <activity android:name=".ui.configurationlist.ConfigurationListActivity" />
-        <activity android:name=".ui.news.NewsActivity"></activity>
+        <activity android:name=".ui.news.NewsActivity" />
+        <activity android:name=".ui.completedsession.CompletedSessionActivity"
+            android:label="@string/completed_session"/>
     </application>
 
 </manifest>

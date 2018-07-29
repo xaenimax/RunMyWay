@@ -78,7 +78,6 @@ public class MainActivityFragment extends Fragment {
                 if(runSession == null){
                     lastSessionTextView.setText(getString(R.string.no_run_session));
                 }else {
-                    //TODO finish setup ui
                     lastSessionTextView.setText(""+runSession.sessionDate + ": km cak e distance");
                 }
             }

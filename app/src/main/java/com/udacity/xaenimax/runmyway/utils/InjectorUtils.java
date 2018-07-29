@@ -25,6 +25,6 @@ public class InjectorUtils {
 
     public static RunSessionViewFactory provideRunSessionViewModelFactory(Context applicationContext, long configId) {
         RunMyWayRepository repository = provideRepository(applicationContext);
-        return  new RunSessionViewFactory(repository, configId);
+        return new RunSessionViewFactory(repository, configId);
     }
 }
