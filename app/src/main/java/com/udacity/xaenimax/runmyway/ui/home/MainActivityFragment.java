@@ -19,6 +19,11 @@ import com.udacity.xaenimax.runmyway.model.entity.RunSession;
 import com.udacity.xaenimax.runmyway.ui.runsession.RunSessionActivity;
 import com.udacity.xaenimax.runmyway.viewmodel.MainViewModel;
 
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.time.format.DateTimeFormatter;
+import java.util.Locale;
+
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
@@ -78,7 +83,15 @@ public class MainActivityFragment extends Fragment {
                 if(runSession == null){
                     lastSessionTextView.setText(getString(R.string.no_run_session));
                 }else {
-                    lastSessionTextView.setText(""+runSession.sessionDate + ": km cak e distance");
+                    DateFormat dateFormat = SimpleDateFormat.getDateTimeInstance();// new SimpleDateFormat("yyyy-mm-dd hh:mm:ss");
+
+                    //to convert Date to String, use format method of SimpleDateFormat class.
+                    String strDate = dateFormat.format(runSession.sessionDate);
+                    lastSessionTextView.setText(String.format(Locale.getDefault(), "%s: %.2f minutes, %d calories, %.2f Km",
+                            strDate,
+                            runSession.duration/(1000.0*60),
+                            runSession.calories,
+                            runSession.distance));
                 }
             }
         });
