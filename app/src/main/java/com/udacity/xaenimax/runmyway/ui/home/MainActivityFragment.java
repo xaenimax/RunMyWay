@@ -27,6 +27,8 @@ import java.util.Locale;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
+import static com.udacity.xaenimax.runmyway.ui.runsession.RunSessionActivity.ONE_MINUTE_IN_MILLIS;
+
 
 /**
  * A placeholder fragment containing a simple view.
@@ -87,9 +89,11 @@ public class MainActivityFragment extends Fragment {
 
                     //to convert Date to String, use format method of SimpleDateFormat class.
                     String strDate = dateFormat.format(runSession.sessionDate);
-                    lastSessionTextView.setText(String.format(Locale.getDefault(), "%s: %.2f minutes, %d calories, %.2f Km",
+                    int minutes = (int) (runSession.duration % ONE_MINUTE_IN_MILLIS);
+
+                    lastSessionTextView.setText(String.format(Locale.getDefault(), "%s: %d minutes, %d calories, %.2f Km",
                             strDate,
-                            runSession.duration/(1000.0*60),
+                            minutes,
                             runSession.calories,
                             runSession.distance));
                 }

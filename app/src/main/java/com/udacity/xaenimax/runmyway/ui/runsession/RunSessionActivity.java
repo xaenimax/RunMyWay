@@ -62,7 +62,7 @@ public class RunSessionActivity extends AppCompatActivity {
     private static final String STARTED_TIMER = "started_timer";
     private static final String BASE_TIMER = "base_timer";
     private static final String TOTAL_TIME = "total_time";
-    public static final double ONE_MINUTE_IN_MILLIS = 1000 * 60.0;
+    public static final double ONE_MINUTE_IN_MILLIS = (long) (1000 * 60.0);
     public static final int AVG_CALORIES_BURNED_PER_MINUTE = 6;
 
     private GoogleFitService.GoogleFitListener mListener;
@@ -83,7 +83,7 @@ public class RunSessionActivity extends AppCompatActivity {
     private FusedLocationProviderClient mFusedLocationClient;
     private LocationRequest mLocationRequest;
 
-    private Double totalDistance = 0d, lastLongitude = 0d, lastLatitude = 0d;
+    private Double totalDistance = 0d, lastLongitude = null, lastLatitude = null;
 
     private RunSessionViewModel mViewModel;
     private long mConfigId;
@@ -246,23 +246,27 @@ public class RunSessionActivity extends AppCompatActivity {
 
     //region Location Service
 
-    private double GetDistanceFromLatLonInKm(double lat1, double lon1, double lat2, double lon2) {
-        final int R = 6371;
-        // Radius of the earth in km
-        double dLat = deg2rad(lat2 - lat1);
-        // deg2rad below
-        double dLon = deg2rad(lon2 - lon1);
-        double a = Math.sin(dLat / 2) * Math.sin(dLat / 2) + Math.cos(deg2rad(lat1)) * Math.cos(deg2rad(lat2)) * Math.sin(dLon / 2) * Math.sin(dLon / 2);
-        double c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
-        double d = R * c;
-        // Distance in km
-        return d;
+    private double GetDistanceFromLatLonInKm(Double previousLat, Double previousLon, Double newLat, Double newLon) {
+        double distance = 0;
+        if(previousLat != null || previousLon != null){
+            double theta = previousLon - newLon;
+            distance = Math.sin(deg2rad(previousLat)) * Math.sin(deg2rad(newLat)) + Math.cos(deg2rad(previousLat)) * Math.cos(deg2rad(newLat)) * Math.cos(deg2rad(theta));
+            distance = Math.acos(distance);
+            distance = rad2deg(distance);
+            distance = distance * 60 * 1.1515;
+            distance = distance * 1.609344;
+
+        }
+        return distance;
+
     }
 
     private double deg2rad(double deg) {
-        return deg * (Math.PI / 180);
+        return (deg * Math.PI / 180.0);
     }
-
+    private double rad2deg(double rad) {
+        return (rad * 180.0 / Math.PI);
+    }
     private void stopRequestingUpdates() {
         mFusedLocationClient.removeLocationUpdates(mLocationCallback);
     }
@@ -422,14 +426,14 @@ public class RunSessionActivity extends AppCompatActivity {
 
     private void saveCurrentSession() {
         int calories = calculateCalories();
-        RunSession currentSession = new RunSession(mTotalTime, totalDistance, calories, new Date());
+        RunSession currentSession = new RunSession(Math.abs(mStartBase), totalDistance, calories, new Date());
         RunMyWayRepository repository = InjectorUtils.provideRepository(this);
         repository.insertNewRunSession(currentSession);
     }
 
     private int calculateCalories() {
         //at the moment it is just a rough calories calculus
-        double calories = AVG_CALORIES_BURNED_PER_MINUTE * mTotalTime / ONE_MINUTE_IN_MILLIS;
+        double calories = AVG_CALORIES_BURNED_PER_MINUTE * Math.abs(mStartBase)/ ONE_MINUTE_IN_MILLIS;
         return (int) calories;
     }
 
