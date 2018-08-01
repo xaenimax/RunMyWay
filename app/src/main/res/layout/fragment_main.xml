@@ -86,6 +86,6 @@
         app:layout_constraintStart_toStartOf="parent"
         android:gravity="center"
         android:background="@android:color/transparent"
-        android:src="@mipmap/play"
+        android:src="@drawable/play"
         android:contentDescription="@string/play_button"/>
 </android.support.constraint.ConstraintLayout>

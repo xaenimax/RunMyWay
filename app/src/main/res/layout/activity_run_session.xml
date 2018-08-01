@@ -34,9 +34,9 @@
             />
         <ImageButton
             android:id="@+id/start_stop_button"
-            android:layout_width="@dimen/one_hundred_dp"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:src="@mipmap/stop"
+            android:src="@drawable/stop"
             android:layout_marginTop="@dimen/thirtytwo_dp"
             android:adjustViewBounds="true"
             android:background="@android:color/transparent"

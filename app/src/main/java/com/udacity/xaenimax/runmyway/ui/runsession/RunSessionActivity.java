@@ -423,6 +423,12 @@ public class RunSessionActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 if (mTimerStarted) {
+                    runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            Snackbar.make(startStopImageButton, getString(R.string.advice_message), Snackbar.LENGTH_SHORT).show();;
+                        }
+                    });
                     stopTimer();
                     mTimerStarted = false;
                 } else {

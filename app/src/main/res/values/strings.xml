@@ -57,4 +57,5 @@
     </string-array>
     <string name="appwidget_text">Your last sessions:</string>
     <string name="add_widget">Add widget</string>
+    <string name="advice_message">Click to start/stop. Long click to end session</string>
 </resources>
