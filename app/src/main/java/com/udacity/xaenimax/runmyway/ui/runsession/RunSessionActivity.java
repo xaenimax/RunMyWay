@@ -9,6 +9,7 @@ import android.content.Intent;
 import android.content.IntentSender;
 import android.content.pm.PackageManager;
 import android.location.Location;
+import android.media.MediaPlayer;
 import android.os.SystemClock;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -50,6 +51,8 @@ import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+
+import static com.udacity.xaenimax.runmyway.model.entity.ConfigurationStep.STEP_TYPE_RUN;
 
 public class RunSessionActivity extends AppCompatActivity {
     private static final String LOG_TAG = RunSessionActivity.class.getSimpleName();
@@ -378,6 +381,12 @@ public class RunSessionActivity extends AppCompatActivity {
                         runOnUiThread(new Runnable() {
                             @Override
                             public void run() {
+                                //if changing steptype the app play a sound
+                                if(!step.stepType.equals(currentRunStep.getText())){
+                                    int rawId =  step.stepType.equals(STEP_TYPE_RUN) ? R.raw.run : R.raw.walk;
+                                    final MediaPlayer mediaPlayer = MediaPlayer.create(RunSessionActivity.this, rawId);
+                                    mediaPlayer.start();
+                                }
                                 currentRunStep.setText(step.stepType);
                             }
                         });
@@ -386,6 +395,11 @@ public class RunSessionActivity extends AppCompatActivity {
                     runOnUiThread(new Runnable() {
                         @Override
                         public void run() {
+                            //if changing steptype the app play a sound
+                            if(currentRunStep.getText().length() == 0){
+                                final MediaPlayer mediaPlayer = MediaPlayer.create(RunSessionActivity.this, R.raw.run);
+                                mediaPlayer.start();
+                            }
                             currentRunStep.setText(getString(R.string.run));
                         }
                     });
