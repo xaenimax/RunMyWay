@@ -60,7 +60,7 @@ public class ListViewService extends RemoteViewsService {
             Log.d(LOG_TAG, "Assigning values at index " + i);
             RunSession session = myRunSessions.get(i);
 
-            RemoteViews views = new RemoteViews(mContext.getPackageName(), R.layout.configuration_step_item);
+            RemoteViews views = new RemoteViews(mContext.getPackageName(), R.layout.widget_list_item);
 
             DateFormat dateFormat = SimpleDateFormat.getDateTimeInstance();// new SimpleDateFormat("yyyy-mm-dd hh:mm:ss");
             String strDate = dateFormat.format(session.sessionDate);

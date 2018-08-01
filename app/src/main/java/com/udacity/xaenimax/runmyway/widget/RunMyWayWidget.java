@@ -39,6 +39,7 @@ public class RunMyWayWidget extends AppWidgetProvider {
     private static void loadData(Context context, RemoteViews views) {
         //open main activity when click on widget
         Intent intent = new Intent(context, MainActivity.class);
+        intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
         PendingIntent pendingIntent = PendingIntent.getActivity(context, 0, intent, PendingIntent.FLAG_UPDATE_CURRENT);
         views.setOnClickPendingIntent(R.id.appwidget_text, pendingIntent);
 
@@ -56,6 +57,8 @@ public class RunMyWayWidget extends AppWidgetProvider {
         for (int appWidgetId : appWidgetIds) {
             updateAppWidget(context, appWidgetManager, appWidgetId);
         }
+        appWidgetManager.notifyAppWidgetViewDataChanged(appWidgetIds, R.id.sessions_lv);
+
     }
 
     @Override

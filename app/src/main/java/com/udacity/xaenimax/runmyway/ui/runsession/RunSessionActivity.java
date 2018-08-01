@@ -1,8 +1,10 @@
 package com.udacity.xaenimax.runmyway.ui.runsession;
 
 import android.Manifest;
+import android.appwidget.AppWidgetManager;
 import android.arch.lifecycle.Observer;
 import android.arch.lifecycle.ViewModelProviders;
+import android.content.ComponentName;
 import android.content.Intent;
 import android.content.IntentSender;
 import android.content.pm.PackageManager;
@@ -41,6 +43,7 @@ import com.udacity.xaenimax.runmyway.ui.completedsession.CompletedSessionActivit
 import com.udacity.xaenimax.runmyway.utils.InjectorUtils;
 import com.udacity.xaenimax.runmyway.viewmodel.RunSessionViewFactory;
 import com.udacity.xaenimax.runmyway.viewmodel.RunSessionViewModel;
+import com.udacity.xaenimax.runmyway.widget.RunMyWayWidget;
 
 import java.util.Date;
 import java.util.List;
@@ -467,6 +470,15 @@ public class RunSessionActivity extends AppCompatActivity {
         RunSession currentSession = new RunSession(Math.abs(mStartBase), totalDistance, calories, new Date());
         RunMyWayRepository repository = InjectorUtils.provideRepository(this);
         repository.insertNewRunSession(currentSession);
+
+        //update widget listview items there is a new session
+        AppWidgetManager appWidgetManager = AppWidgetManager.getInstance(this);
+        int[] appWidgetIds = appWidgetManager.getAppWidgetIds(new ComponentName(this, RunMyWayWidget.class));
+        appWidgetManager.notifyAppWidgetViewDataChanged(appWidgetIds, R.id.sessions_lv);
+        Intent intent = new Intent(this, RunMyWayWidget.class);
+        intent.setAction(AppWidgetManager.ACTION_APPWIDGET_UPDATE);
+        intent.putExtra(AppWidgetManager.EXTRA_APPWIDGET_IDS, appWidgetIds);
+        sendBroadcast(intent);
     }
 
     private int calculateCalories() {
