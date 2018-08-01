@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<appwidget-provider xmlns:android="http://schemas.android.com/apk/res/android"
+    android:initialKeyguardLayout="@layout/run_my_way_widget"
+    android:initialLayout="@layout/run_my_way_widget"
+    android:minHeight="40dp"
+    android:minWidth="80dp"
+    android:previewImage="@drawable/running_couple_no_elevation"
+    android:resizeMode="horizontal|vertical"
+    android:updatePeriodMillis="86400000"
+    android:widgetCategory="home_screen"/>

@@ -88,8 +88,6 @@ public class MainActivityFragment extends Fragment {
                     lastSessionTextView.setText(getString(R.string.no_run_session));
                 }else {
                     DateFormat dateFormat = SimpleDateFormat.getDateTimeInstance();// new SimpleDateFormat("yyyy-mm-dd hh:mm:ss");
-
-                    //to convert Date to String, use format method of SimpleDateFormat class.
                     String strDate = dateFormat.format(runSession.sessionDate);
                     String minutes =
                             String.format(Locale.getDefault(),"%d:%d",

@@ -48,8 +48,13 @@
     <string name="activity">Activity</string>
     <string name="completed_session">Completed Session</string>
     <string name="home_session_resume">%s:\n%s minutes, %d calories, %.2f Km</string>
+    <string name="congratulations">Congratulations</string>
+    <string name="home">Home</string>
+    <string name="completed_session_resume">You have completed your sessions!\n%s minutes, %d calories, %.2f Km</string>
     <string-array name="running_mode">
         <item>Walk</item>
         <item>Run</item>
     </string-array>
+    <string name="appwidget_text">Your last sessions:</string>
+    <string name="add_widget">Add widget</string>
 </resources>

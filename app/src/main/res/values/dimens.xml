@@ -10,4 +10,12 @@
     <dimen name="one_hundred_dp">100dp</dimen>
     <dimen name="thirtytwo_dp">32dp</dimen>
     <dimen name="eighty_sp">80sp</dimen>
+    <dimen name="twentyfour_sp">24sp</dimen>
+    <dimen name="fourty_sp">40sp</dimen>
+
+    <!--
+Refer to App Widget Documentation for margin information
+http://developer.android.com/guide/topics/appwidgets/index.html#CreatingLayout
+    -->
+    <dimen name="widget_margin">8dp</dimen>
 </resources>

@@ -99,6 +99,11 @@ public class RunMyWayRepository {
         return mConfigurationDao.listAllConfigurations();
     }
 
+    public List<RunSession> getRunSessions() {
+        return mRunSessionDao.listAllRunSessions();
+    }
+
+
     public interface OnInsertEndedListener {
         void OnInsertEnded(long idInserted);
     }

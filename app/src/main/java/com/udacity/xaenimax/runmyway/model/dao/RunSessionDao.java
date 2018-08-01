@@ -14,7 +14,7 @@ import java.util.List;
 @Dao
 public interface RunSessionDao {
     @Query("SELECT * FROM run_session ORDER BY session_date DESC")
-    LiveData<List<RunSession>> listAllRunSessions();
+    List<RunSession> listAllRunSessions();
 
     @Query("SELECT * FROM run_session ORDER BY session_date DESC LIMIT 1")
     LiveData<RunSession> getLastRunSession();

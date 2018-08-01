@@ -29,11 +29,22 @@
         <activity
             android:name=".ui.runsession.RunSessionActivity"
             android:label="@string/run_sesssion"
-            android:noHistory="true"/>
+            android:noHistory="true" />
         <activity android:name=".ui.configurationlist.ConfigurationListActivity" />
         <activity android:name=".ui.news.NewsActivity" />
-        <activity android:name=".ui.completedsession.CompletedSessionActivity"
-            android:label="@string/completed_session"/>
+        <activity
+            android:name=".ui.completedsession.CompletedSessionActivity"
+            android:label="@string/completed_session" />
+
+        <receiver android:name=".widget.RunMyWayWidget">
+            <intent-filter>
+                <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
+            </intent-filter>
+
+            <meta-data
+                android:name="android.appwidget.provider"
+                android:resource="@xml/run_my_way_widget_info" />
+        </receiver>
     </application>
 
 </manifest>

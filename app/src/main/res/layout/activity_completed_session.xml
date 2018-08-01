@@ -1,9 +1,59 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".ui.completedsession.CompletedSessionActivity">
-
-</android.support.constraint.ConstraintLayout>
+    android:fillViewport="true"
+    android:id="@+id/scrollView">
+    <android.support.constraint.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        tools:context=".ui.completedsession.CompletedSessionActivity">
+        <TextView
+            android:id="@+id/congrats_tv"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textStyle="bold"
+            android:text="@string/congratulations"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            android:gravity="center_horizontal"
+            android:textSize="@dimen/fourty_sp"
+            android:layout_marginTop="@dimen/thirtytwo_dp"
+            app:layout_constraintTop_toTopOf="parent"/>
+        <ImageView
+            android:layout_marginTop="@dimen/eight_dp"
+            android:id="@+id/trophy_iv"
+            android:layout_width="@dimen/one_hundred_dp"
+            android:layout_height="wrap_content"
+            android:adjustViewBounds="true"
+            android:src="@drawable/trophy"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            android:gravity="center_horizontal"
+            app:layout_constraintTop_toBottomOf="@id/congrats_tv"/>
+        <TextView
+            android:id="@+id/goal_tv"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textStyle="bold"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            android:gravity="center_horizontal"
+            android:textSize="@dimen/twentyfour_sp"
+            android:layout_marginTop="@dimen/thirtytwo_dp"
+            app:layout_constraintTop_toBottomOf="@id/trophy_iv"/>
+        <Button
+            android:id="@+id/go_home_button"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:layout_constraintTop_toBottomOf="@id/goal_tv"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            android:layout_marginTop="@dimen/thirtytwo_dp"
+            android:background="@color/colorAccent"
+            android:textColor="@android:color/white"
+            android:text="@string/home"/>
+    </android.support.constraint.ConstraintLayout>
+</ScrollView>

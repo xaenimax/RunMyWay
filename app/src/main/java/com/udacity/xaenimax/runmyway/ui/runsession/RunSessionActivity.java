@@ -379,6 +379,13 @@ public class RunSessionActivity extends AppCompatActivity {
                             }
                         });
                     }
+                } else {
+                    runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            currentRunStep.setText(getString(R.string.run));
+                        }
+                    });
                 }
             }
         });
