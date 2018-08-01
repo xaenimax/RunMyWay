@@ -5,7 +5,7 @@ android {
         config {
             keyAlias 'RunMyWayKey'
             keyPassword 'marina82'
-            storeFile file('C:/Progetti/Android/RunMyWay/runmywaykestore.jks')
+            storeFile file('../runmywaykestore.jks')
             storePassword 'udacity2018'
         }
     }

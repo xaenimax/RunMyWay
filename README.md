@@ -6,7 +6,8 @@ The rubric regarding the AsyncTask is implemented in the NewsActivity, it is acc
 You will need the NYT Api key, you can get it here <a href='https://developer.nytimes.com/signup'>NYT Developer site</a> and insert it in the gradle.properties file in this way:
 NYT_API_KEY = "your_api_key"
 
-Tha app implements a Google Sign in in the MainActivity, you can look <a href='https://developers.google.com/identity/sign-in/android/start-integrating'>here</a> to configure the project to OAuth2
+Tha app implements a Google Sign in in the MainActivity, you can look <a href='https://developers.google.com/identity/sign-in/android/start-integrating'>here</a> to configure the project to OAuth2.
+
 I have also implemented Google Location services in the RunSessionActivity, the Google Fit service is implemented in both MainActivity and RunSessionActivity.
 
 
