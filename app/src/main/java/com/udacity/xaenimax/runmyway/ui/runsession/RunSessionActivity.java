@@ -20,11 +20,7 @@ import android.widget.Chronometer;
 import android.widget.ImageButton;
 import android.widget.TextView;
 
-import com.google.android.gms.auth.api.signin.GoogleSignIn;
-import com.google.android.gms.common.api.GoogleApi;
 import com.google.android.gms.common.api.ResolvableApiException;
-import com.google.android.gms.fitness.Fitness;
-import com.google.android.gms.fitness.data.DataType;
 import com.google.android.gms.location.FusedLocationProviderClient;
 import com.google.android.gms.location.LocationCallback;
 import com.google.android.gms.location.LocationRequest;
@@ -62,6 +58,8 @@ public class RunSessionActivity extends AppCompatActivity {
     private static final String STARTED_TIMER = "started_timer";
     private static final String BASE_TIMER = "base_timer";
     private static final String TOTAL_TIME = "total_time";
+    private static final String LAST_ALTITUDE = "last_altitude";
+
     public static final double ONE_MINUTE_IN_MILLIS = (long) (1000 * 60.0);
     public static final int AVG_CALORIES_BURNED_PER_MINUTE = 6;
 
@@ -83,7 +81,7 @@ public class RunSessionActivity extends AppCompatActivity {
     private FusedLocationProviderClient mFusedLocationClient;
     private LocationRequest mLocationRequest;
 
-    private Double totalDistance = 0d, lastLongitude = null, lastLatitude = null;
+    private Double totalDistance = 0d, lastLongitude = null, lastLatitude = null, lastAltitude = null;
 
     private RunSessionViewModel mViewModel;
     private long mConfigId;
@@ -131,6 +129,9 @@ public class RunSessionActivity extends AppCompatActivity {
         if (savedInstanceState.keySet().contains(LAST_LATITUDE)) {
             lastLatitude = savedInstanceState.getDouble(LAST_LATITUDE);
         }
+        if (savedInstanceState.keySet().contains(LAST_ALTITUDE)) {
+            lastAltitude = savedInstanceState.getDouble(LAST_ALTITUDE);
+        }
         if (savedInstanceState.keySet().contains(STARTED_TIMER)) {
             mTimerStarted = savedInstanceState.getBoolean(STARTED_TIMER);
         }
@@ -148,6 +149,8 @@ public class RunSessionActivity extends AppCompatActivity {
         outState.putDouble(TOTAL_DISTANCE, totalDistance);
         outState.putDouble(LAST_LATITUDE, lastLatitude);
         outState.putDouble(LAST_LONGITUDE, lastLongitude);
+        outState.putDouble(LAST_ALTITUDE, lastAltitude);
+
         outState.putBoolean(STARTED_TIMER, mTimerStarted);
         outState.putLong(BASE_TIMER, mStartBase);
         outState.putLong(TOTAL_TIME, mTotalTime);
@@ -245,8 +248,8 @@ public class RunSessionActivity extends AppCompatActivity {
 
 
     //region Location Service
-
-    private double GetDistanceFromLatLonInKm(Double previousLat, Double previousLon, Double newLat, Double newLon) {
+/*
+    private double GetDistanceKm(Double previousLat, Double previousLon, Double newLat, Double newLon) {
         double distance = 0;
         if(previousLat != null || previousLon != null){
             double theta = previousLon - newLon;
@@ -267,6 +270,7 @@ public class RunSessionActivity extends AppCompatActivity {
     private double rad2deg(double rad) {
         return (rad * 180.0 / Math.PI);
     }
+ */
     private void stopRequestingUpdates() {
         mFusedLocationClient.removeLocationUpdates(mLocationCallback);
     }
@@ -387,13 +391,23 @@ public class RunSessionActivity extends AppCompatActivity {
                 }
                 for (Location location : locationResult.getLocations()) {
                     // Update distance with location data
-                    totalDistance += GetDistanceFromLatLonInKm(lastLatitude, lastLongitude, location.getLatitude(), location.getLongitude());
+                    if (lastLatitude != null && lastLongitude != null && lastAltitude != null) {
+
+                        Location lastLocation = new Location("lastLocation");
+                        lastLocation.setLatitude(lastLatitude);
+                        lastLocation.setLongitude(lastLongitude);
+                        lastLocation.setAltitude(lastAltitude);
+                        totalDistance += lastLocation.distanceTo(location)/1000.0;
+                    /*
+                    totalDistance += calculateDistanceInKm(lastLatitude, lastLongitude, lastAltitude,
+                                location.getLatitude(), location.getLongitude(), location.getAltitude());
+                    */
+                    }
                     lastLatitude = location.getLatitude();
                     lastLongitude = location.getLongitude();
+                    lastAltitude = location.getAltitude();
                 }
             }
-
-            ;
         };
         startStopImageButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -415,6 +429,23 @@ public class RunSessionActivity extends AppCompatActivity {
                 return false;
             }
         });
+    }
+
+    private double calculateDistanceInKm(Double lastLatitude, Double lastLongitude, Double lastAltitude, double latitude, double longitude, double altitude) {
+        if (lastLatitude != null && lastLongitude != null && lastAltitude != null) {
+            Location newLocation = new Location("newLocation");
+            newLocation.setLatitude(latitude);
+            newLocation.setLongitude(longitude);
+            newLocation.setAltitude(altitude);
+
+            Location lastLocation = new Location("lastLocation");
+            lastLocation.setLatitude(lastLatitude);
+            lastLocation.setLongitude(lastLongitude);
+            lastLocation.setAltitude(lastAltitude);
+
+            return newLocation.distanceTo(lastLocation)/1000.0; //in KM
+        }
+        return 0;
     }
 
     private void stopRegisteringSession() {

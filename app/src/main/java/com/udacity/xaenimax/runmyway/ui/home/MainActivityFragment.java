@@ -7,6 +7,7 @@ import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.os.Bundle;
+import android.text.Html;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -23,6 +24,7 @@ import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.time.format.DateTimeFormatter;
 import java.util.Locale;
+import java.util.concurrent.TimeUnit;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -89,13 +91,20 @@ public class MainActivityFragment extends Fragment {
 
                     //to convert Date to String, use format method of SimpleDateFormat class.
                     String strDate = dateFormat.format(runSession.sessionDate);
-                    int minutes = (int) (runSession.duration % ONE_MINUTE_IN_MILLIS);
+                    String minutes =
+                            String.format(Locale.getDefault(),"%d:%d",
+                                    TimeUnit.MILLISECONDS.toMinutes(runSession.duration),
+                                    TimeUnit.MILLISECONDS.toSeconds(runSession.duration) -
+                                            TimeUnit.MINUTES.toSeconds(TimeUnit.MILLISECONDS.toMinutes(runSession.duration))
+                            );
 
-                    lastSessionTextView.setText(String.format(Locale.getDefault(), "%s: %d minutes, %d calories, %.2f Km",
-                            strDate,
-                            minutes,
-                            runSession.calories,
-                            runSession.distance));
+                    lastSessionTextView.setText(
+                                String.format(getString(R.string.home_session_resume),
+                                        strDate,
+                                        minutes,
+                                        runSession.calories,
+                                        runSession.distance)
+                                );
                 }
             }
         });

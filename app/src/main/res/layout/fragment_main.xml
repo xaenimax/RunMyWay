@@ -9,13 +9,15 @@
 
     <TextView
         android:id="@+id/welcome_tv"
-        android:layout_width="wrap_content"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="@dimen/sixteen_dp"
+        android:layout_marginEnd="@dimen/sixteen_dp"
         android:layout_marginTop="@dimen/sixteen_dp"
         android:text="@string/welcome_string"
         android:textStyle="bold"
         android:textSize="@dimen/main_title_text_size"
+        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
     <TextView
@@ -60,16 +62,16 @@
         app:layout_constraintStart_toStartOf="@id/welcome_tv"
         app:layout_constraintTop_toBottomOf="@id/today_achievement_calory_tv"
         />
+
     <TextView
         android:id="@+id/last_session_recap_tv"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginTop="@dimen/sixteen_dp"
-        android:layout_marginEnd="@dimen/eight_dp"
         android:textSize="@dimen/normal_text_size"
+        app:layout_constraintEnd_toEndOf="@id/welcome_tv"
         app:layout_constraintStart_toStartOf="@id/welcome_tv"
-        app:layout_constraintTop_toBottomOf="@id/last_session_tv"
-        />
+        app:layout_constraintTop_toBottomOf="@id/last_session_tv" />
     <ImageButton
         android:id="@+id/play_button"
         android:layout_width="110dp"
@@ -77,6 +79,8 @@
         android:layout_gravity="center_horizontal"
         android:scaleType="centerCrop"
         android:adjustViewBounds="true"
+        android:layout_marginTop="@dimen/sixteen_dp"
+
         app:layout_constraintTop_toBottomOf="@id/last_session_recap_tv"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"

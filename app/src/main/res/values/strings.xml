@@ -47,6 +47,7 @@
 
     <string name="activity">Activity</string>
     <string name="completed_session">Completed Session</string>
+    <string name="home_session_resume">%s:\n%s minutes, %d calories, %.2f Km</string>
     <string-array name="running_mode">
         <item>Walk</item>
         <item>Run</item>
