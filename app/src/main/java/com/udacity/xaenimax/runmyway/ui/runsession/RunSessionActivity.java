@@ -52,6 +52,7 @@ import java.util.List;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
+import static android.content.Intent.FLAG_ACTIVITY_NO_HISTORY;
 import static com.udacity.xaenimax.runmyway.model.entity.ConfigurationStep.STEP_TYPE_RUN;
 
 public class RunSessionActivity extends AppCompatActivity {
@@ -77,7 +78,6 @@ public class RunSessionActivity extends AppCompatActivity {
 
     private long mStartBase = 0;
     private long mTotalTime;
-
 
     private static final int GOOGLE_LOCATION_REQUEST_CODE = 6590;
     public static final int LOCATION_TIME_INTERVAL = 10000;
@@ -479,6 +479,7 @@ public class RunSessionActivity extends AppCompatActivity {
 
     private void goToCompletedSession() {
         Intent intent = new Intent(RunSessionActivity.this, CompletedSessionActivity.class);
+        intent.setFlags(FLAG_ACTIVITY_NO_HISTORY);
         startActivity(intent);
     }
 

@@ -28,8 +28,7 @@
             android:label="@string/title_activity_add_configuration" />
         <activity
             android:name=".ui.runsession.RunSessionActivity"
-            android:label="@string/run_sesssion"
-            android:noHistory="true" />
+            android:label="@string/run_sesssion"/>
         <activity android:name=".ui.configurationlist.ConfigurationListActivity" />
         <activity android:name=".ui.news.NewsActivity" />
         <activity
