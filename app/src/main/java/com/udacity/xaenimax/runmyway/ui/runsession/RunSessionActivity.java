@@ -152,10 +152,14 @@ public class RunSessionActivity extends AppCompatActivity {
     @Override
     protected void onSaveInstanceState(Bundle outState) {
         outState.putBoolean(REQUEST_LOCATION_UPDATE, mRequestingLocationUpdates);
+
         outState.putDouble(TOTAL_DISTANCE, totalDistance);
-        outState.putDouble(LAST_LATITUDE, lastLatitude);
-        outState.putDouble(LAST_LONGITUDE, lastLongitude);
-        outState.putDouble(LAST_ALTITUDE, lastAltitude);
+        if(lastLatitude != null)
+            outState.putDouble(LAST_LATITUDE, lastLatitude);
+        if(lastLongitude != null)
+            outState.putDouble(LAST_LONGITUDE, lastLongitude);
+        if(lastLongitude != null)
+            outState.putDouble(LAST_ALTITUDE, lastAltitude);
 
         outState.putBoolean(STARTED_TIMER, mTimerStarted);
         outState.putLong(BASE_TIMER, mStartBase);
@@ -440,13 +444,20 @@ public class RunSessionActivity extends AppCompatActivity {
                     runOnUiThread(new Runnable() {
                         @Override
                         public void run() {
-                            Snackbar.make(startStopImageButton, getString(R.string.advice_message), Snackbar.LENGTH_SHORT).show();;
+                            Snackbar.make(startStopImageButton, getString(R.string.advice_message), Snackbar.LENGTH_SHORT).show();
+                            startStopImageButton.setImageDrawable(getDrawable(R.drawable.play));
                         }
                     });
                     stopTimer();
                     mTimerStarted = false;
                 } else {
                     mTimerStarted = true;
+                    runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            startStopImageButton.setImageDrawable(getDrawable(R.drawable.stop));
+                        }
+                    });
                     startTimer();
                 }
             }

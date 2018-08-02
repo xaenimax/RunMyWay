@@ -19,17 +19,17 @@ import com.udacity.xaenimax.runmyway.managers.GoogleFitService;
 import com.udacity.xaenimax.runmyway.ui.addconfiguration.AddConfigurationActivity;
 import com.udacity.xaenimax.runmyway.ui.configurationlist.ConfigurationListActivity;
 import com.udacity.xaenimax.runmyway.ui.news.NewsActivity;
-import com.udacity.xaenimax.runmyway.viewmodel.MainViewModel;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import butterknife.OnClick;
 
 import static com.udacity.xaenimax.runmyway.managers.GoogleFitService.GOOGLE_FIT_PERMISSIONS_REQUEST_CODE;
 import static com.udacity.xaenimax.runmyway.managers.GoogleFitService.accessHistoryData;
 import static com.udacity.xaenimax.runmyway.managers.GoogleFitService.getFitnessOptions;
 
 public class MainActivity extends AppCompatActivity {
-    private static final String LOG_TAG = AppCompatActivity.class.getSimpleName();
+    //private static final String LOG_TAG = AppCompatActivity.class.getSimpleName();
 
     @BindView(R.id.toolbar)
     public Toolbar toolbar;
@@ -46,14 +46,14 @@ public class MainActivity extends AppCompatActivity {
 
         setSupportActionBar(toolbar);
 
-        FloatingActionButton fab = findViewById(R.id.fab);
-        fab.setOnClickListener(new View.OnClickListener() {
+        /*
+        mFloatingActionButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 startActivity(new Intent(MainActivity.this, AddConfigurationActivity.class));
             }
         });
-
+*/
         setUpListeners();
     }
     @Override
@@ -84,10 +84,15 @@ public class MainActivity extends AppCompatActivity {
         };
     }
 
+    @OnClick(R.id.fab)
+    public void createNewConfiguration(View view){
+        startActivity(new Intent(MainActivity.this, AddConfigurationActivity.class));
+    }
+
     /**
      * Retrieve the main fragment and send parameters to show in UI
-     * @param distance
-     * @param Kcal
+     * @param distance distance run
+     * @param Kcal Kcal burned
      */
     private void setFragmentsParameter(float distance, long Kcal) {
         FragmentManager fragmentManager = getSupportFragmentManager();

@@ -32,7 +32,8 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             android:gravity="center_horizontal"
-            app:layout_constraintTop_toBottomOf="@id/congrats_tv"/>
+            app:layout_constraintTop_toBottomOf="@id/congrats_tv"
+            android:contentDescription="@string/thophy"/>
         <TextView
             android:id="@+id/goal_tv"
             android:layout_width="match_parent"

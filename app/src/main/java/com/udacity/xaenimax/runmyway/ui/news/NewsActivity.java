@@ -18,6 +18,7 @@ import com.udacity.xaenimax.runmyway.model.entity.NewsResponse;
 import com.udacity.xaenimax.runmyway.utils.NetworkUtils;
 
 import java.io.IOException;
+import java.lang.ref.WeakReference;
 import java.util.List;
 
 import butterknife.BindView;
@@ -53,7 +54,7 @@ public class NewsActivity extends AppCompatActivity {
     }
 
     private void loadData() {
-        new DownloadNewsAsyncTask().execute();
+        new DownloadNewsAsyncTask(this).execute();
     }
 
     protected void onSaveInstanceState(Bundle outState) {
@@ -71,27 +72,30 @@ public class NewsActivity extends AppCompatActivity {
         }
     }
 
-    class DownloadNewsAsyncTask extends AsyncTask<Void, Void, List<Doc>> {
+    static class DownloadNewsAsyncTask extends AsyncTask<Void, Void, List<Doc>> {
+        private WeakReference<NewsActivity> mActivityWeakReference;
+
+        DownloadNewsAsyncTask(NewsActivity activity){
+            mActivityWeakReference = new WeakReference<>(activity);
+        }
 
         @Override
         protected List<Doc> doInBackground(Void... strings) {
-            runOnUiThread(new Runnable() {
-                @Override
-                public void run() {
-                    dataLoaderProgressBar.setVisibility(View.VISIBLE);
-                }
-            });
+            NewsActivity activity = mActivityWeakReference.get();
+            if(activity != null && !activity.isFinishing()) {
+                activity.dataLoaderProgressBar.setVisibility(View.VISIBLE);
 
-            String response = null;
-            NewsResponse newsResponse = null;
-            try {
-                response = NetworkUtils.getResponseFromHttpUrl(NetworkUtils.buildUrl());
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-            if (response != null) {
-                newsResponse = new Gson().fromJson(response, NewsResponse.class);
-                return newsResponse.response.docs;
+                String response = null;
+                NewsResponse newsResponse = null;
+                try {
+                    response = NetworkUtils.getResponseFromHttpUrl(NetworkUtils.buildUrl());
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+                if (response != null) {
+                    newsResponse = new Gson().fromJson(response, NewsResponse.class);
+                    return newsResponse.response.docs;
+                }
             }
             return null;
         }
@@ -99,17 +103,15 @@ public class NewsActivity extends AppCompatActivity {
         @Override
         protected void onPostExecute(List<Doc> docs) {
             super.onPostExecute(docs);
-            runOnUiThread(new Runnable() {
-                @Override
-                public void run() {
-                    dataLoaderProgressBar.setVisibility(View.GONE);
+            NewsActivity activity = mActivityWeakReference.get();
+            if(activity != null && !activity.isFinishing()) {
+                activity.dataLoaderProgressBar.setVisibility(View.GONE);
+                if (docs != null) {
+                    NewsAdapter adapter = new NewsAdapter(docs);
+                    activity.newsList.setAdapter(adapter);
+                } else {
+                    Snackbar.make(activity.newsList, activity.getString(R.string.connection_error), Snackbar.LENGTH_SHORT).show();
                 }
-            });
-            if(docs != null) {
-                NewsAdapter adapter = new NewsAdapter(docs);
-                newsList.setAdapter(adapter);
-            } else {
-                Snackbar.make(newsList, getString(R.string.connection_error), Snackbar.LENGTH_SHORT).show();
             }
         }
     }

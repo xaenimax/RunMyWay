@@ -58,4 +58,6 @@
     <string name="appwidget_text">Your last sessions:</string>
     <string name="add_widget">Add widget</string>
     <string name="advice_message">Click to start/stop. Long click to end session</string>
+    <string name="thophy">Trophy</string>
+    <string name="add_new_configuration">Add new configuration</string>
 </resources>
