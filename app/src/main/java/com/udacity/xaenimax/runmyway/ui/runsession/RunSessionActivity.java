@@ -242,7 +242,6 @@ public class RunSessionActivity extends AppCompatActivity {
 
     }
 
-
     private void updateUIAndSetData(List<ConfigurationStep> configurationSteps) {
         if (configurationSteps.size() > 0) {
             currentRunStep.setText(configurationSteps.get(0).stepType);
@@ -258,29 +257,6 @@ public class RunSessionActivity extends AppCompatActivity {
 
 
     //region Location Service
-/*
-    private double GetDistanceKm(Double previousLat, Double previousLon, Double newLat, Double newLon) {
-        double distance = 0;
-        if(previousLat != null || previousLon != null){
-            double theta = previousLon - newLon;
-            distance = Math.sin(deg2rad(previousLat)) * Math.sin(deg2rad(newLat)) + Math.cos(deg2rad(previousLat)) * Math.cos(deg2rad(newLat)) * Math.cos(deg2rad(theta));
-            distance = Math.acos(distance);
-            distance = rad2deg(distance);
-            distance = distance * 60 * 1.1515;
-            distance = distance * 1.609344;
-
-        }
-        return distance;
-
-    }
-
-    private double deg2rad(double deg) {
-        return (deg * Math.PI / 180.0);
-    }
-    private double rad2deg(double rad) {
-        return (rad * 180.0 / Math.PI);
-    }
- */
     private void stopRequestingUpdates() {
         mFusedLocationClient.removeLocationUpdates(mLocationCallback);
     }
@@ -470,23 +446,6 @@ public class RunSessionActivity extends AppCompatActivity {
                 return false;
             }
         });
-    }
-
-    private double calculateDistanceInKm(Double lastLatitude, Double lastLongitude, Double lastAltitude, double latitude, double longitude, double altitude) {
-        if (lastLatitude != null && lastLongitude != null && lastAltitude != null) {
-            Location newLocation = new Location("newLocation");
-            newLocation.setLatitude(latitude);
-            newLocation.setLongitude(longitude);
-            newLocation.setAltitude(altitude);
-
-            Location lastLocation = new Location("lastLocation");
-            lastLocation.setLatitude(lastLatitude);
-            lastLocation.setLongitude(lastLongitude);
-            lastLocation.setAltitude(lastAltitude);
-
-            return newLocation.distanceTo(lastLocation)/1000.0; //in KM
-        }
-        return 0;
     }
 
     private void stopRegisteringSession() {
