@@ -35,6 +35,7 @@
         app:layout_constraintTop_toBottomOf="@id/question_tv"
         android:layout_margin="@dimen/sixteen_dp"
         android:hint="@string/insert_name"
+        android:inputType="text"
         android:gravity="center"
         />
     <Button
