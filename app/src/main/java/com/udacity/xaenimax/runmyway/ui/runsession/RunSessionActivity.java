@@ -76,6 +76,7 @@ public class RunSessionActivity extends AppCompatActivity {
     private List<ConfigurationStep> mConfigurationSteps;
 
     private long mStartBase = 0;
+
     private long mTotalTime;
 
 
@@ -89,8 +90,8 @@ public class RunSessionActivity extends AppCompatActivity {
 
     private Double totalDistance = 0d, lastLongitude = null, lastLatitude = null, lastAltitude = null;
 
-    private RunSessionViewModel mViewModel;
-    private long mConfigId;
+    RunSessionViewModel mViewModel;
+    long mConfigId;
 
     @BindView(R.id.start_stop_button)
     public ImageButton startStopImageButton;
@@ -185,7 +186,7 @@ public class RunSessionActivity extends AppCompatActivity {
             startRequestingUpdates();
         }
         if (mTimerStarted) {
-            startTimer();
+            startTimer(false);
         }
     }
 
@@ -195,8 +196,10 @@ public class RunSessionActivity extends AppCompatActivity {
         GoogleFitService.unregisterGoogleFitnessData(this, mListener);
     }
 
-    private void startTimer() {
-        timerChronometer.setBase(SystemClock.elapsedRealtime() + mStartBase);
+    private void startTimer(boolean fromPause) {
+        if (fromPause) {
+            timerChronometer.setBase(SystemClock.elapsedRealtime() + mStartBase);
+        }
         timerChronometer.start();
         //it also starts fitness recording if possibile
         GoogleFitService.registerGoogleFitnessData(this, mListener);
@@ -362,7 +365,7 @@ public class RunSessionActivity extends AppCompatActivity {
                             @Override
                             public void run() {
                                 //if changing steptype the app play a sound
-                                if(!step.stepType.equals(currentRunStep.getText())){
+                                if(!step.stepType.contentEquals(currentRunStep.getText())){
                                     int rawId =  step.stepType.equals(STEP_TYPE_RUN) ? R.raw.run : R.raw.walk;
                                     final MediaPlayer mediaPlayer = MediaPlayer.create(RunSessionActivity.this, rawId);
                                     mediaPlayer.start();
@@ -434,7 +437,7 @@ public class RunSessionActivity extends AppCompatActivity {
                             startStopImageButton.setImageDrawable(getDrawable(R.drawable.stop));
                         }
                     });
-                    startTimer();
+                    startTimer(true);
                 }
             }
         });
