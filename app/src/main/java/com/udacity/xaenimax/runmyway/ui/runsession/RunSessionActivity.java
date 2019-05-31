@@ -175,7 +175,7 @@ public class RunSessionActivity extends AppCompatActivity {
         if(mTimerStarted){
             stopTimer();
         }
-        stopRequestingUpdates();
+        //stopRequestingUpdates();
     }
 
     @Override
